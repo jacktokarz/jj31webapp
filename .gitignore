@@ -6,4 +6,5 @@
 /build/
 
 /django_backend/backend/backend/__pycache__/
-/django_backend/backend/backend/etc/secret_key.txt
+/django_backend/backend/etc/secret_key.txt
+*.pyc
