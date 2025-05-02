@@ -1,56 +1,89 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoins } from '@fortawesome/free-solid-svg-icons';
 
-const coinIcon = <FontAwesomeIcon icon={faCoins} />;
+import { CoinIcon } from './CoinIcon';
+import { ChallengeCard } from './Card';
 
-function ChallengeCard({title, value, description}) {
+import { type Team } from '../types/Team';
+
+function WelcomeHeader({pointValue, teamName}) {
 	return (
-		<div className="max-w-[300px] w-full space-y-6 px-4">
-	    <nav className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
-	      <p className="leading-6 text-gray-700 dark:text-gray-200 text-center">
-	        {title}
-	      </p>
-				<div>
-					{value}
-					{coinIcon}
+		<header className="header-holder">
+			<p className="site-title">JJ's 31st BDAY</p>
+			<div className="gray-line" />
+			<div className="inline">
+				<div className="inline">{teamName}</div>
+				<div className="inline float-right">
+					{pointValue}
+					<CoinIcon />
 				</div>
-				<p>
-					Requirements:
-					<br />
-					{description}
-				</p>
-	    </nav>
-	  </div>
+			</div>
+		</header>
 	);
-}
+};
+
+/*
+function CardsDisplay({hiddenCardIds}) {
+	return(
+		<div>
+			{}
+			<ChallengeCard
+				title=
+				value={10}
+				description=
+			/>
+		</div>
+	);
+};
+*/
+
 
 export function Welcome() {
-	const teamName = "Team Name";
-	const pointValue = 69;
+	const cardsData = [
+		{
+			id: 1,
+			name: "JJ Birthday!",
+			description: "Celebrate JJ birthday",
+			pointValue: 10,
+		},
+		{
+			id: 2,
+			name: "More Birthday!!!",
+			description: "Celebrate HARDER >:o",
+			pointValue: 20,
+		},
+		{
+			id: 3,
+			name: "Most Bday?",
+			description: "Could there be more celebrating???",
+			pointValue: 1,
+		},
+	];
+	const teamData: Team = {
+		teamName: "Team Name",
+		points: 69,
+		favoritedCardIds: [1],
+		completedCardIds: [2]
+	};
+	const displayCards = cardsData.filter((card) => !teamData.completedCardIds.includes(card.id));
   return (
-    <main className="flex items-center justify-center pt-16 pb-4">
-      <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
-        <header className="flex flex-col items-center gap-9">
-					<div>
-						<h2>{teamName}</h2>
-						<p>
-							{pointValue}
-							{coinIcon}
-						</p>
-					</div>
-					<ChallengeCard
-						title="JJ's Birthday!"
-						value={10}
-						description="Celebrate JJ's birthday"
-					/>
-					<ChallengeCard
-						title="More Birthday!!!"
-						value={20}
-						description="Celebrate HARDER >:o"
-					/>
-        </header>
-      </div>
+		<main className="centered">
+      <div>
+				<WelcomeHeader
+					pointValue={teamData.points}
+					teamName={teamData.teamName}
+				/>
+				<div>
+					{displayCards.map((card) => {
+						return (
+							<ChallengeCard
+								title={card.name}
+								value={card.points}
+								description={card.description}
+							/>
+						)
+					})}
+	      </div>
+			</div>
     </main>
   );
 }
