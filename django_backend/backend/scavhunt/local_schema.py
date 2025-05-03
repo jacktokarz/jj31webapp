@@ -18,9 +18,6 @@ class Card():
         self.description = description
         self.value = value
 
-class Category(Enum):
-    NO_CATEGORY = 1
-
 
 class Question():
 
@@ -28,9 +25,9 @@ class Question():
                  title: str,
                  description: str,
                  cost: int,
-                 category: Category,
+                 category: str,
                  additional_info: bool):
-        self.tile = title
+        self.title = title
         self.description = description
         self.cost = cost
         self.category = category
@@ -44,10 +41,12 @@ class Team():
                  name: str, 
                  points: int,
                  completed_cards: list[Card],
-                 favorite_cards: list[Card]):
+                 favorite_cards: list[Card],
+                 asked_questions: list[Question]):
         self.id = id
         self.players = players
         self.name = name
         self.points = points
         self.completed_cards = completed_cards
         self.favorite_cards = favorite_cards
+        self.asked_questions = asked_questions
