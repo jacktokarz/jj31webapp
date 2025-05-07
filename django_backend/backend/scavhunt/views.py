@@ -1,42 +1,72 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 import scavhunt.local_schema as schem
 import scavhunt.serializer as sl
+from scavhunt.fetcherprovider import FetcherProvider
 
 # Create your views here.
 
+fetcher = FetcherProvider(False).get_fetcher()
+
+def player_list(request):
+
+    if request.method == 'GET':
+        serializer = sl.PlayerSerializer(fetcher.get_all_players(), many = True)
+        return JsonResponse(serializer.data, safe=False)
+
 def player_detail(request, id):
-    player = schem.Player(id, "Foreign Punch")
+    player = fetcher.get_player(id)
+
+    if player == None:
+        raise Http404
 
     if request.method == 'GET':
         serializer = sl.PlayerSerializer(player)
         return JsonResponse(serializer.data)
+    
+def card_list(request):
+
+    if request.method == 'GET':
+        serializer = sl.CardSerializer(fetcher.get_all_cards(), many = True)
+        return JsonResponse(serializer.data, safe=False)
 
 def card_detail(request, id):
-    card = schem.Card(id, "Title",  "Description of a card", 400)
+    card = fetcher.get_card(id)
+
+    if card == None:
+        raise Http404 
 
     if request.method == 'GET':
         serializered = sl.CardSerializer(card)
         return JsonResponse(serializered.data)
+    
+def question_list(request):
+
+    if request.method == 'GET':
+        serializer = sl.QuestionSerializer(fetcher.get_all_questions(), many = True)
+        return JsonResponse(serializer.data, safe=False)
+    
 
 def question_detail(request, id):
-    question = schem.Question("A question", "A  descripiton", 20, "Category",  True)
+    question = fetcher.get_question(id)
+
+    if question == None:
+        raise Http404
 
     if request.method == 'GET':
         serialized = sl.QuestionSerializer(question)
         return JsonResponse(serialized.data)
+    
+def team_list(request):
+
+    if request.method == 'GET':
+        serializer = sl.TeamSerializer(fetcher.get_all_teams(), many = True)
+        return JsonResponse(serializer.data, safe=False)
 
 def team_detail(request, id):
-    team = schem.Team(
-        "ID",
-        [schem.Player("pID", "JJ"), schem.Player("pID2", "Jack")],
-        "Foreign Punch",
-        30,
-        [schem.Card("cID", "Card", "Description", 20),
-             schem.Card("cId2", "Jump off a bridge, lmao", "Do it I dare", 1000)],
-        [schem.Card("cID", "Card", "Description", 20),
-             schem.Card("cId2", "Jump off a bridge, lmao", "Do it I dare", 1000)],
-        [schem.Question("Title", "Desc", 100, "Cat", True)]
-    )
+    team = fetcher.get_team(id)
+
+    if team == None:
+        raise Http404
 
     if request.method == 'GET':
         serialized =  sl.TeamSerializer(team)
