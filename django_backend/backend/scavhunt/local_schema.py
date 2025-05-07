@@ -22,11 +22,13 @@ class Card():
 class Question():
 
     def __init__(self,
+                 id: str,
                  title: str,
                  description: str,
                  cost: int,
                  category: str,
                  additional_info: bool):
+        self.id = id
         self.title = title
         self.description = description
         self.cost = cost

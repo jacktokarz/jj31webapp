@@ -15,6 +15,7 @@ class CategorySerializer(serializers.Serializer):
     id = serializers.IntegerField()
 
 class QuestionSerializer(serializers.Serializer):
+    id = serializers.CharField()
     title = serializers.CharField()
     description = serializers.CharField()
     cost = serializers.IntegerField()
