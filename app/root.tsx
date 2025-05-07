@@ -8,6 +8,10 @@ import {
 } from "react-router";
 
 import type { Route } from "./+types/root";
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import { faCoins } from '@fortawesome/free-solid-svg-icons';
+
 import "./app.css";
 
 export const links: Route.LinksFunction = () => [
@@ -23,6 +27,20 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
+
+function Footer() {
+	return (
+		<BottomNavigation
+			className="centered bottom-fixed"
+      showLabels
+    >
+      <BottomNavigationAction label="Rules" />
+			<BottomNavigationAction label="Cards" />
+			<BottomNavigationAction label="Question Store" />
+    </BottomNavigation>
+	);
+};
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -34,6 +52,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
+				<Footer />
         <ScrollRestoration />
         <Scripts />
       </body>

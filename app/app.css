@@ -9,15 +9,70 @@ body {
   }
 }
 
+main {
+	margin-bottom: 60px;
+}
+
+.absolute-right {
+	position: absolute;
+	right: 14px;
+}
+
+.bottom-fixed {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 8px;
+	height: 36px !important;
+}
+
 .card-container {
-	border-radius: 20px;
-	border: 1px gray solid;
-	padding: 20px;
+	width: 300px;
+	padding: 20px 0 20px 0;
+	margin: 40px 0 44px 0;
+}
+.card-container p {
+	margin-bottom: 14px;
+}
+
+.card-details {
+	display: flex;
+	font-size: 18px;
+	align-items: center;
+	margin-bottom: 12px;
+}
+
+.card-title {
+	font-size: 22px;
 }
 
 .centered {
 	align-items: center;
 	justify-content: center;
+	display: flex;
+}
+
+.difficulty-label {
+	padding: 8px;
+	border: 1px black solid;
+	border-radius: 12px;
+	min-width: 90px;
+	margin-right: 6px;
+	text-align: center;
+}
+
+.favorites-filter-holder {
+	height: 56px;
+	margin: 6px 0 24px 0;
+}
+
+.filters-container {
+	display: block;
+	min-width: 300px;
+}
+
+.flex {
 	display: flex;
 }
 
@@ -30,6 +85,10 @@ body {
 	width: fill;
 	border: 1px gray solid;
 	margin: 12px 0 12px 0;
+}
+
+.half-width {
+	width: 49%;
 }
 
 .header-holder {
