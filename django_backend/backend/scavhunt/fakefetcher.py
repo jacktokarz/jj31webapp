@@ -68,5 +68,3 @@ class FakeFetcher(Fetcher):
 
     def get_all_cards(self) -> list[sc.Card]:
         return cards
-    
-print(FakeFetcher().get_all_cards())
