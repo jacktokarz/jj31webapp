@@ -1,5 +1,6 @@
 import scavhunt.fetcher as fetcher
 import scavhunt.fakefetcher as ff
+import scavhunt.notionfetcher as nf
 
 class FetcherProvider():
 
