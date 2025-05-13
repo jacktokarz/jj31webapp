@@ -7,6 +7,7 @@ body {
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
+  background-color: #fdd3e2;
 }
 
 main {
@@ -100,7 +101,18 @@ main {
 	display: inline;
 }
 
+.jj-coin-img {
+	display: inline;
+	margin-left: 6px;
+	width: 36px;
+	height: 36px;
+}
+
 .site-title {
 	width: 100%;
 	font-size: 36px;
+}
+
+.vertical-align {
+	vertical-align: middle;
 }

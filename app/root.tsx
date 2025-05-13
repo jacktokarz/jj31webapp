@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   isRouteErrorResponse,
   Links,
@@ -10,7 +11,10 @@ import {
 import type { Route } from "./+types/root";
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import { faCoins } from '@fortawesome/free-solid-svg-icons';
+
+import { Welcome } from './welcome/welcome';
+import { QuestionStore } from './welcome/QuestionStore';
+import { Rules } from './welcome/Rules';
 
 import "./app.css";
 
@@ -28,20 +32,26 @@ export const links: Route.LinksFunction = () => [
 ];
 
 
-function Footer() {
+function Footer({ setDisplayedPage }) {
 	return (
 		<BottomNavigation
 			className="centered bottom-fixed"
       showLabels
     >
-      <BottomNavigationAction label="Rules" />
-			<BottomNavigationAction label="Cards" />
-			<BottomNavigationAction label="Question Store" />
+      <BottomNavigationAction onClick={() => setDisplayedPage('rules')} label="Rules" />
+			<BottomNavigationAction onClick={() => setDisplayedPage('welcome')} label="Cards" />
+			<BottomNavigationAction onClick={() => setDisplayedPage('question store')} label="Question Store" />
     </BottomNavigation>
 	);
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {
+	const [displayedPage, setDisplayedPage] = useState('welcome');
+	const page = (displayedPage === 'rules')
+		? <Rules />
+		: (displayedPage === 'question store')
+			? <QuestionStore teamName="Root" teamPointValue="10" />
+			: children;
   return (
     <html lang="en">
       <head>
@@ -51,10 +61,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
-				<Footer />
-        <ScrollRestoration />
-        <Scripts />
+				<main className="centered">
+					{page}
+					<Footer setDisplayedPage={setDisplayedPage} />
+        	<ScrollRestoration />
+        	<Scripts />
+				</main>
       </body>
     </html>
   );

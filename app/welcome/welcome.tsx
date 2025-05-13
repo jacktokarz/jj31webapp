@@ -1,26 +1,10 @@
 import React, { useState } from 'react';
 import Divider from '@mui/material/Divider';
 
-import { CoinIcon } from './CoinIcon';
 import { ChallengeCard } from './Card';
 import { Filters } from './Filters';
 import { type Team } from '../types/Team';
-
-function WelcomeHeader({pointValue, teamName}) {
-	return (
-		<header className="header-holder">
-			<p className="site-title">JJ's 31st BDAY</p>
-			<div className="gray-line" />
-			<div className="inline">
-				<div className="inline">{teamName}</div>
-				<div className="inline float-right">
-					{pointValue}
-					<CoinIcon />
-				</div>
-			</div>
-		</header>
-	);
-};
+import { WelcomeHeader} from './WelcomeHeader';
 
 /*
 function CardsDisplay({hiddenCardIds}) {
@@ -101,38 +85,37 @@ export function Welcome() {
 	console.log('displayed: ', displayedCards);
 	
   return (
-		<main className="centered">
-      <div>
-				<WelcomeHeader
-					pointValue={teamData.points}
-					teamName={teamData.teamName}
-				/>
-				<Filters
-					filterCards={filterCards}
-					setDisplayedCards={setDisplayedCards}
-					originalCards={originalCards}
-					faveCardIds={teamData.favoritedCardIds}
-				/>
-				<Divider
-					orientation="horizontal"
-				/>
-				<div>
-					{displayedCards.map((card) => {
-						return (
-							<ChallengeCard
-								key={card.id}
-								faveCardIds={teamData.favoritedCardIds}
-								updateFavorites={updateFavorites}
-								id={card.id}
-								title={card.name}
-								difficulty={card.difficulty}
-								pointValue={card.pointValue}
-								description={card.description}
-							/>
-						)
-					})}
-	      </div>
-			</div>
-    </main>
+    <div>
+			<WelcomeHeader
+				titleText="JJ's 31st BDAY"
+				pointValue={teamData.points}
+				teamName={teamData.teamName}
+			/>
+			<Filters
+				filterCards={filterCards}
+				setDisplayedCards={setDisplayedCards}
+				originalCards={originalCards}
+				faveCardIds={teamData.favoritedCardIds}
+			/>
+			<Divider
+				orientation="horizontal"
+			/>
+			<div>
+				{displayedCards.map((card) => {
+					return (
+						<ChallengeCard
+							key={card.id}
+							faveCardIds={teamData.favoritedCardIds}
+							updateFavorites={updateFavorites}
+							id={card.id}
+							title={card.name}
+							difficulty={card.difficulty}
+							pointValue={card.pointValue}
+							description={card.description}
+						/>
+					)
+				})}
+      </div>
+		</div>
   );
 }

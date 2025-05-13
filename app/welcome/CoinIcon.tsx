@@ -1,6 +1,5 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoins } from '@fortawesome/free-solid-svg-icons';
+import jjcoin from './images/jjcoin.png';
 
 export function CoinIcon() {
-	return <FontAwesomeIcon style={{'marginLeft': '6px'}} icon={faCoins} />;
+	return <img className="jj-coin-img" src={jjcoin} alt="JJ coin" />;
 };

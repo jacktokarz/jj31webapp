@@ -27,7 +27,14 @@ export function ChallengeCard({
 	
 	return (
 		<div className="card-container">
-			<Accordion expanded={expanded === title} onChange={handleChange(title)}>
+			<Accordion
+				style={{
+					boxShadow: '6px 6px 10px #A7E8FE, -3px -3px 6px #DD4B60',
+					borderRadius: '18px',
+				}}
+				expanded={expanded === title}
+				onChange={handleChange(title)}
+			>
         <AccordionSummary
 					className="card-title"
 					expandIcon={<ExpandMoreIcon />}
