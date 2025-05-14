@@ -7,4 +7,9 @@
 
 /django_backend/backend/backend/__pycache__/
 /django_backend/backend/etc/secret_key.txt
+/django_backend/backend/etc/notion_key.txt
+/django_backend/backend/scavhunt/etc/notion_key.txt
 *.pyc
+
+#VS Code
+/.vscode/
