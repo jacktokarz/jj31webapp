@@ -5,7 +5,7 @@ from scavhunt.fetcherprovider import FetcherProvider
 
 # Create your views here.
 
-fetcher = FetcherProvider(False).get_fetcher()
+fetcher = FetcherProvider(True).get_fetcher()
 
 def player_list(request):
 

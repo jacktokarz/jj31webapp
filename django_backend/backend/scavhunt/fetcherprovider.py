@@ -8,4 +8,7 @@ class FetcherProvider():
         self.is_prod = is_prod
 
     def get_fetcher(self) -> fetcher.Fetcher:
-        return ff.FakeFetcher()
+        if self.is_prod:
+            return nf.NotionFetcher()
+        else:
+            return ff.FakeFetcher()

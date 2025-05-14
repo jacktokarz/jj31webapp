@@ -5,10 +5,10 @@ class Fetcher:
     def __init__(self):
         raise NotImplementedError
 
-    def get_player(id: str) -> sc.Player:
+    def get_player(self, id: str) -> sc.Player:
         raise NotImplementedError
 
-    def get_all_players() -> list[sc.Player]:
+    def get_all_players(self) -> list[sc.Player]:
         raise NotImplementedError
 
     def get_question(self, id: str) -> sc.Question:
@@ -23,7 +23,7 @@ class Fetcher:
     def get_all_teams(self) -> list[sc.Team]:
         raise NotImplementedError
 
-    def get_card(self) -> sc.Card:
+    def get_card(self, id:  str) -> sc.Card:
         raise NotImplementedError
 
     def get_all_cards(self) -> list[sc.Card]:
