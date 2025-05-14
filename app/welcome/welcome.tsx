@@ -1,27 +1,13 @@
-import React, { useState } from 'react';
-import Divider from '@mui/material/Divider';
+import { useEffect, useState } from 'react';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 
-import { ChallengeCard } from './Card';
-import { Filters } from './Filters';
-import { type Team } from '../types/Team';
-import { WelcomeHeader} from './WelcomeHeader';
+import { Cards } from './Cards';
+import { QuestionStore } from './QuestionStore';
+import { Rules } from './Rules';
 
-/*
-function CardsDisplay({hiddenCardIds}) {
-	return(
-		<div>
-			{}
-			<ChallengeCard
-				title=
-				value={10}
-				description=
-			/>
-		</div>
-	);
-};
-*/
 
-const cardsData = [
+const cardsDummyData = [
 	{
 		id: 1,
 		name: "JJ Birthday!",
@@ -45,77 +31,100 @@ const cardsData = [
 	},
 ];
 
-function filterCards(
-	originalCards,
-	faveCardIds,
-	filterText,
-	filterDiff,
-	onlyFavorites,
-) {
-	let newCards = [...originalCards];
-	console.log('filtering with: ',filterText, filterDiff, onlyFavorites, faveCardIds);
-	if (onlyFavorites) {
-		newCards = newCards.filter(card => {console.log('id', card.id); return faveCardIds.includes(card.id)});
-	}
-	if (filterDiff !== '') {
-		newCards = newCards.filter(card => (card.difficulty === filterDiff));
-	}
-	if (filterText.length > 2) {
-		newCards = newCards.filter(card => (card.name.includes(filterText) || card.description.includes(filterText)));
-	}
-	return newCards;
+
+function PasswordPrompt({ allTeamsData, setTeamData, setDisplayedPage }) {
+	const [enteredPassword, setEnteredPassword] = useState('');
+	const [errorIsHidden, setErrorIsHidden] = useState(true);
+	return (
+		<div>
+			<header className="header-holder">
+				<p className="site-title">JJ Scavenger Hunt Site :D</p>
+			</header>
+			<TextField
+				id="outlined-basic"
+				label="Team Password"
+				variant="outlined"
+				fullWidth
+				value={enteredPassword}
+				onChange={(e) => {
+					setEnteredPassword(e.target.value);
+					if (e.target.value === '') {
+						setErrorIsHidden(true);
+					}
+				}}
+			/>
+			<p hidden={errorIsHidden} className="error centered">
+				Incorrect Password
+			</p>
+			<br />
+			<Button
+				style={{ margin: ' 24px auto', fontSize: '18px', background: '#A7E8FE' }}
+				className="centered"
+				variant="contained"
+				disabled={enteredPassword.length < 1}
+				onClick={() => {
+					allTeamsData.map((team) => {
+						if (team.password === enteredPassword) {
+							setErrorIsHidden(true);
+							setTeamData(team);
+							setDisplayedPage('cards');
+							return;
+						}
+					});
+					setErrorIsHidden(false);
+				}}
+			>
+				Submit
+			</Button>
+		</div>
+	);
 }
 
-function updateFavorites(id) {
-	console.log("send API call to update team's favorites list with ",id);
-	console.log("temporarily update local version of team data to uinclude or not include this id");
-}
-
-
-export function Welcome() {
-	const teamData: Team = {
+export function Welcome({
+	displayedPage,
+	setDisplayedPage,
+}) {
+	const [allTeamsData, setAllTeamsData] = useState([{
 		teamName: "Team Name",
 		points: 69,
+		password: 'a',
 		favoritedCardIds: [1],
 		completedCardIds: [2]
-	};
-	const originalCards = cardsData.filter((card) => !teamData.completedCardIds.includes(card.id));
-	const [displayedCards, setDisplayedCards] = useState([...originalCards]);
-	console.log('original: ',originalCards);
-	console.log('displayed: ', displayedCards);
+	}]);
+	const [teamData, setTeamData] = useState({});
+	const [cardsData, setCardsData] = useState(cardsDummyData);
 	
-  return (
-    <div>
-			<WelcomeHeader
-				titleText="JJ's 31st BDAY"
-				pointValue={teamData.points}
-				teamName={teamData.teamName}
-			/>
-			<Filters
-				filterCards={filterCards}
-				setDisplayedCards={setDisplayedCards}
-				originalCards={originalCards}
-				faveCardIds={teamData.favoritedCardIds}
-			/>
-			<Divider
-				orientation="horizontal"
-			/>
-			<div>
-				{displayedCards.map((card) => {
-					return (
-						<ChallengeCard
-							key={card.id}
-							faveCardIds={teamData.favoritedCardIds}
-							updateFavorites={updateFavorites}
-							id={card.id}
-							title={card.name}
-							difficulty={card.difficulty}
-							pointValue={card.pointValue}
-							description={card.description}
-						/>
-					)
-				})}
-      </div>
-		</div>
-  );
+	useEffect(() => {
+			// call to API gets allTeamsData, then sets it.
+		});
+	useEffect(() => {
+		// call to API gets teamData, then sets it.
+		// this is called every 30 seconds?
+		// starting when teamData is first updated
+	});
+	useEffect(() => {
+		// call to API to get cardsData. This only happens once?
+		// or also happens when they click favorite?
+	});
+	
+	switch(displayedPage) {
+		case 'rules':
+			return <Rules />;
+			break;
+		case 'question store':
+			return <QuestionStore teamData={teamData} />;
+			break;
+		case 'cards':
+			return <Cards cardsData={cardsData} teamData={teamData} />;
+			break;
+		default:
+			return (
+				<PasswordPrompt
+					allTeamsData={allTeamsData}
+					setDisplayedPage={setDisplayedPage}
+					setTeamData={setTeamData}
+				/>
+			);
+			break;
+	}
 }

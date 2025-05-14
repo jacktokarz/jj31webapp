@@ -63,6 +63,12 @@ main {
 	text-align: center;
 }
 
+.error {
+	margin-top: 12px;
+	color: orangered;
+	font-weight: bold;
+}
+
 .favorites-filter-holder {
 	height: 56px;
 	margin: 6px 0 24px 0;

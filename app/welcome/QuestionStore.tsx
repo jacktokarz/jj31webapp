@@ -1,12 +1,12 @@
 import { WelcomeHeader } from './WelcomeHeader';
 
-export function QuestionStore({ teamPointValue, teamName }) {
+export function QuestionStore({ teamData }) {
 	return (
 		<div>
 			<WelcomeHeader
 				titleText="Question Store"
-				pointValue={teamPointValue}
-				teamName={teamName}
+				pointValue={teamData.points}
+				teamName={teamData.teamName}
 			/>
 		</div>
 	);

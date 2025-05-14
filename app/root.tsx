@@ -13,8 +13,6 @@ import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 
 import { Welcome } from './welcome/welcome';
-import { QuestionStore } from './welcome/QuestionStore';
-import { Rules } from './welcome/Rules';
 
 import "./app.css";
 
@@ -45,13 +43,9 @@ function Footer({ setDisplayedPage }) {
 	);
 };
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export function Layout() {
 	const [displayedPage, setDisplayedPage] = useState('welcome');
-	const page = (displayedPage === 'rules')
-		? <Rules />
-		: (displayedPage === 'question store')
-			? <QuestionStore teamName="Root" teamPointValue="10" />
-			: children;
+	
   return (
     <html lang="en">
       <head>
@@ -62,7 +56,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
 				<main className="centered">
-					{page}
+					<Welcome
+						displayedPage={displayedPage}
+						setDisplayedPage={setDisplayedPage}
+					/>
 					<Footer setDisplayedPage={setDisplayedPage} />
         	<ScrollRestoration />
         	<Scripts />
