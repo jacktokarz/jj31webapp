@@ -119,6 +119,12 @@ main {
 	font-size: 36px;
 }
 
+.sparkles {
+	font-style: italic;
+	color: goldenrod;
+	text-shadow: 2px 2px violet;
+}
+
 .vertical-align {
 	vertical-align: middle;
 }
