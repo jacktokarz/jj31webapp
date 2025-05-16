@@ -59,7 +59,7 @@ def question_detail(request, id):
     
     if request.method == 'POST':
         sender = ds.DiscordSender()
-        sender.post_question(question, request.data["team_id"], "")
+        sender.post_question(question, request.data["team_id"], request.data["details"])
         return HttpResponse("Success")
 
 @api_view(['POST'])

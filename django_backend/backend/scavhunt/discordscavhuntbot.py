@@ -8,6 +8,10 @@ intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
 
+TEST_CHANNEL = 1372019348364853308
+GENERAL_CHANNEL = 1368396579576352843
+NOISY_ANNOUNCEMENTS = 1368433478772981800
+
 class DiscordBot(discord.Client):
 
     def __init__(self, *, intents, **options):
@@ -24,8 +28,7 @@ class DiscordBot(discord.Client):
 
 bot = DiscordBot(intents=intents)    
 
-TEST_CHANNEL = 1372019348364853308
-GENERAL_CHANNEL = 1368396579576352843
+
 
 @bot.ipc.route()
 async def post_question(data):
@@ -39,7 +42,7 @@ async def post_question(data):
 @bot.ipc.route()
 async def post_leaderboard(data):
      print("Got the leaderboard!")
-     channel = bot.get_channel(TEST_CHANNEL)
+     channel = bot.get_channel(NOISY_ANNOUNCEMENTS)
      print("Got the Channel!")
      await channel.send(data.output)
 
