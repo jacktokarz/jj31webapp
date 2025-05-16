@@ -16,6 +16,14 @@ main {
 	width: 100%;
 }
 
+ol {
+	list-style: trad-chinese-informal;
+}
+
+ul {
+	list-style: circle;
+}
+
 .absolute-right {
 	position: absolute;
 	right: 20px;
@@ -80,7 +88,7 @@ main {
 	min-width: 90px;
 	margin-right: 20px;
 	text-align: center;
-	color: cornsilk;
+	color: black;
 }
 
 .difficulty-Easy {
@@ -96,6 +104,10 @@ main {
 .difficulty-Hard {
 	background-color: indianred;
 	border: none;
+}
+
+.difficulty-Extreme {
+	text-decoration: underline;
 }
 
 .error {
@@ -165,6 +177,10 @@ main {
 	margin-left: 6px;
 	width: 36px;
 	height: 36px;
+}
+
+.rules-subheader {
+	font-size: 18px;
 }
 
 .site-title {

@@ -40,7 +40,7 @@ export function Filters({
 	return (
 		<div className="filters-container">
 			<TextField
-				label="Filter"
+				label="Filter by text"
 				value={filterInput}
 				onChange={(e) => {
 					const newInput = e.target.value;
