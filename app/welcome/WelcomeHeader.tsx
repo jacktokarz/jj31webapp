@@ -6,8 +6,8 @@ export function WelcomeHeader({titleText, pointValue, teamName}) {
 			<p className="site-title">{titleText}</p>
 			<div className="gray-line" />
 			<div className="inline vertical-align">
-				<div className="inline">{teamName}</div>
-				<div className="inline float-right">
+				<div className="inline subtitle">{teamName}</div>
+				<div className="inline float-right subtitle">
 					{pointValue}
 					<CoinIcon />
 				</div>

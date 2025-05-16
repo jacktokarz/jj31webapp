@@ -1,35 +1,13 @@
 import { useEffect, useState } from 'react';
+
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
 import { Cards } from './Cards';
 import { QuestionStore } from './QuestionStore';
 import { Rules } from './Rules';
+import { getCards, getTeams, getTeamData, getQuestions } from './apiCalls';
 
-
-const cardsDummyData = [
-	{
-		id: 1,
-		name: "JJ Birthday!",
-		description: "Celebrate JJ birthday",
-		difficulty: "Easy",
-		pointValue: 10,
-	},
-	{
-		id: 2,
-		name: "More Birthday!!!",
-		description: "Celebrate HARDER >:o",
-		difficulty: "Hard",
-		pointValue: 20,
-	},
-	{
-		id: 3,
-		name: "Most Bday?",
-		description: "Could there be more celebrating???",
-		difficulty: "Medium",
-		pointValue: 1,
-	},
-];
 
 
 function PasswordPrompt({ allTeamsData, setTeamData, setDisplayedPage }) {
@@ -64,7 +42,7 @@ function PasswordPrompt({ allTeamsData, setTeamData, setDisplayedPage }) {
 				disabled={enteredPassword.length < 1}
 				onClick={() => {
 					allTeamsData.map((team) => {
-						if (team.password === enteredPassword) {
+						if (team.password === enteredPassword || team.name === enteredPassword) {
 							setErrorIsHidden(true);
 							setTeamData(team);
 							setDisplayedPage('cards');
@@ -84,35 +62,42 @@ export function Welcome({
 	displayedPage,
 	setDisplayedPage,
 }) {
-	const [allTeamsData, setAllTeamsData] = useState([{
-		teamName: "Team Name",
-		points: 69,
-		password: 'a',
-		favoritedCardIds: [1],
-		completedCardIds: [2]
-	}]);
-	const [teamData, setTeamData] = useState({});
-	const [cardsData, setCardsData] = useState(cardsDummyData);
+	const [allTeamsData, setAllTeamsData] = useState([]);
+	const [teamData, setTeamData] = useState(null);
+	const [cardsData, setCardsData] = useState([]);
+	const [questionsData, setQuestionsData] = useState([]);
 	
 	useEffect(() => {
-			// call to API gets allTeamsData, then sets it.
-		});
+			async function callGetAllData() {
+				const newCards = await getCards();
+				setCardsData(newCards);
+				if (teamData !== null) {
+					const newTeam = await getTeamData(teamData.id);
+					setTeamData(newTeam);
+				}
+			}
+			callGetAllData();
+			setInterval(function(){
+				callGetAllData();
+			}, 30000)
+		}, []);
+		
 	useEffect(() => {
-		// call to API gets teamData, then sets it.
-		// this is called every 30 seconds?
-		// starting when teamData is first updated
-	});
-	useEffect(() => {
-		// call to API to get cardsData. This only happens once?
-		// or also happens when they click favorite?
-	});
+		async function callGetDataOnce() {
+			const newTeams = await getTeams();
+			setAllTeamsData(newTeams);
+			const newQuestions = await getQuestions();
+			setQuestionsData(newQuestions);
+		}
+		callGetDataOnce();
+	}, []);
 	
 	switch(displayedPage) {
 		case 'rules':
 			return <Rules />;
 			break;
 		case 'question store':
-			return <QuestionStore teamData={teamData} />;
+			return <QuestionStore teamData={teamData} questionsData={questionsData} />;
 			break;
 		case 'cards':
 			return <Cards cardsData={cardsData} teamData={teamData} />;

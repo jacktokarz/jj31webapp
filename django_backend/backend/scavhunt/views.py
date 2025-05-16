@@ -23,9 +23,8 @@ def player_detail(request, id):
     if request.method == 'GET':
         serializer = sl.PlayerSerializer(player)
         return JsonResponse(serializer.data)
-    
-def card_list(request):
 
+def card_list(request):
     if request.method == 'GET':
         serializer = sl.CardSerializer(fetcher.get_all_cards(), many = True)
         return JsonResponse(serializer.data, safe=False)
@@ -87,7 +86,7 @@ def card_unfavorite(request, id):
         fetcher.favorite_question(request.data["team_id"], id)
         return HttpResponse("Success")
 
-    
+
 def team_list(request):
 
     if request.method == 'GET':

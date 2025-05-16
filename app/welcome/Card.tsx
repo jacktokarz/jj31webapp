@@ -16,7 +16,7 @@ export function ChallengeCard({
 	id,
 	title,
 	difficulty,
-	pointValue,
+	value,
 	description,
 }) {
 	const [expanded, setExpanded] = useState<string | false>('panel1');
@@ -44,15 +44,17 @@ export function ChallengeCard({
         <AccordionDetails>
 					<Divider style={{margin: '-16px 0 16px 0'}} />
 					<div className="card-details">
-						<div className="difficulty-label">
+						<div
+							className={`difficulty-label difficulty-${difficulty}`}
+						>
 							{difficulty}
 						</div>
 						<div>
-							{pointValue}
+							{value}
 							<CoinIcon />
 							{faveCardIds.includes(id)
-								? <StarBorderIcon onClick={() => updateFavorites(id)} className="absolute-right" />
-								: <StarIcon onClick={() => updateFavorites(id)} className="absolute-right" />
+								? <StarIcon onClick={() => updateFavorites(id)} className="absolute-right" />
+								: <StarBorderIcon onClick={() => updateFavorites(id)} className="absolute-right" />
 							}
 							
 						</div>

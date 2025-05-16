@@ -3,43 +3,42 @@ import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import Divider from '@mui/material/Divider';
+import TextField from '@mui/material/TextField';
 
 import { WelcomeHeader } from './WelcomeHeader';
-import { getQuestions, postQuestion } from './apiCalls';
+import { postQuestion } from './apiCalls';
+import { CoinIcon } from './CoinIcon';
 
-const fakeQuestions = [
-	{
-		title: 'Where is JJ?',
-		cost: 100,
-		requiresInput: true,
-	}
-];
 
 function WaitModal({ waitModalOpen, setWaitModalOpen }) {
+	console.log('wait modal ', waitModalOpen);
 	return (
 		<Modal
 		  open={waitModalOpen}
-			onClose={setWaitModalOpen(false)}
+			onClose={() => setWaitModalOpen(false)}
 		>
-			<p>
-				Your question has been successfully submitted.
-			</p>
-			<p>
-				Your JJokens have been <span>foolishly squandered</span> well spent.
-			</p>
-			<p>
-				JJ or a JJ stand-in will respond to you in Discord shortly.
-			</p>
-			<Button
-				style={{ margin: ' 24px auto', fontSize: '18px', background: '#A7E8FE' }}
-				className="centered"
-				variant="contained"
-				onClick={async () => {
-					setWaitModalOpen(false);
-				}}
-			>
-				Close (or you could click outside of this modal to close it. Your choice, man)
-			</Button>
+			<div className="basic-modal">
+				<p>
+					Your question has been successfully submitted.
+				</p>
+				<p>
+					Your <span className="sparkles">JJokens</span> have been <span style={{ textDecoration: 'line-through' }}>foolishly squandered</span> well spent.
+				</p>
+				<br />
+				<p>
+					JJ or a JJ stand-in will respond to you in Discord shortly.
+				</p>
+				<Button
+					style={{ margin: ' 24px auto', fontSize: '14px', borderRadius: '8px' }}
+					className="centered"
+					variant="contained"
+					onClick={async () => {
+						setWaitModalOpen(false);
+					}}
+				>
+					Close (or you could click outside of this modal to close it. Your choice, man)
+				</Button>
+			</div>
 		</Modal>
 	);
 }
@@ -50,48 +49,62 @@ function ConfirmModal({
 	teamName,
 	setWaitModalOpen,
 }) {
+	if (confirmModalData === null) {
+		return '';
+	}
+	console.log('confirm modal ', confirmModalData);
 	return (
 		<Modal
-      open={comfirmModalData !== null}
+      open={confirmModalData !== null}
 			onClose={() => setConfirmModalData(null)}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-			<p>
-				Are you absolutely certain you want to spend {confirmModalData.question.cost} hard-earned JJ bucks to ask for the following <span className="sparkles">scoinvenger hint</span>:
-			</p>
-			<p>
-				{confirmModalData.question}
-			</p>
-			{confirmModalData.input !== null
-				&& <p>
-						With added context: {confirmModalData.input}
-					</p>
-			}
-			<Button
-				style={{ margin: ' 24px auto', fontSize: '18px', background: '#A7E8FE' }}
-				className="centered"
-				variant="contained"
-				onClick={async () => {
-					await postQuestion(teamName, confirmModalData.question);
-					setConfirmModalData(null);
-				}}
-			>
-				I COMMIT
-			</Button>
+			<div className="basic-modal">
+				<p>
+					Are you absolutely <span className="underlined">certain</span> you want to
+					spend <span style={{ fontSize: '20px' }}>{confirmModalData.question.cost}</span> hard-earned <span className="sparkles">JJokens</span> to
+					ask for the following scoinvenger hint:
+				</p>
+				<p className="italic">
+					{confirmModalData.question.title}
+				</p>
+				{confirmModalData.input.length > 0
+					&& <p style={{ marginTop: '12px'}}>
+							With added context:
+							<br />
+							<span className="italic">{confirmModalData.input}</span>
+						</p>
+				}
+				<Button
+					style={{ margin: ' 24px auto', fontSize: '18px', /*background: '#A7E8FE'*/ }}
+					className="centered"
+					variant="contained"
+					onClick={async () => {
+						await postQuestion(teamName, confirmModalData.question);
+						setWaitModalOpen(true);
+						setConfirmModalData(null);
+					}}
+				>
+					I COMMIT
+				</Button>
+			</div>
 		</Modal>
 	);
 }
 
-function QuestionHolder({ question }) {
+function QuestionHolder({ teamData, question, setConfirmModalData }) {
 	const [questionInput, setQuestionInput] = useState('');
-	
 	return (
 		<div className="question-holder">
 			<div className="question-title">
 				{question.title}
 			</div>
-			{question.requiresInput
+			<div className="hint-cost">
+				{question.cost}
+				<CoinIcon />
+			</div>
+			{question.additional_info === "True"
 			&& <TextField
 					label="Enter Details"
 					value={questionInput}
@@ -103,10 +116,14 @@ function QuestionHolder({ question }) {
 				/>
 			}
 			<Button
-				style={{ margin: ' 24px auto', fontSize: '18px', background: '#A7E8FE' }}
+				style={{ margin: ' 14px auto', fontSize: '18px' }}
 				className="centered"
 				variant="contained"
-				disabled={question.requiresInput && questionInput.length < 1}
+				disabled={
+					question.additional_info==="True" && questionInput.length < 1
+					||
+					question.cost > teamData.points
+				}
 				onClick={() => {
 					setConfirmModalData({ question: question, input: questionInput });
 				}}
@@ -117,37 +134,28 @@ function QuestionHolder({ question }) {
 	)
 }
 
-export function QuestionStore({ teamData }) {
-	const [questions, setQuestions] = useState([]);
+export function QuestionStore({ teamData, questionsData }) {
 	const [confirmModalData, setConfirmModalData] = useState(null);
 	const [waitModalOpen, setWaitModalOpen] = useState(false);
-	
-	useEffect(() => {
-		// this is called every... 30 seconds?
-		async function callGetQuestions() {
-			const questionList = await getQuestions();
-			if (Array.isArray(questionList)) {
-				setQuestions(questionList);							
-			}
-		};
-		callGetQuestions();
-	}, []);
-	
+
 	return (
-		<div>
+		<div className="full-width">
 			<WelcomeHeader
 				titleText="Scoinvenger Hints"
 				pointValue={teamData.points}
 				teamName={teamData.teamName}
 			/>
 			<Divider
+				style={{ marginTop: '80px' }}
 				orientation="horizontal"
 			/>
-			{questions.map((question) => {
+			{questionsData.map((question) => (
 				<QuestionHolder
+					teamData={teamData}
 					question={question}
+					setConfirmModalData={setConfirmModalData}
 				/>
-			})}
+			))}
 			<ConfirmModal
 				confirmModalData={confirmModalData}
 				setConfirmModalData={setConfirmModalData}

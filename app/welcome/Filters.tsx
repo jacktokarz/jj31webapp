@@ -7,8 +7,29 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 
 
+function filterCards(
+	originalCards,
+	faveCardIds,
+	filterText,
+	filterDiff,
+	onlyFavorites,
+) {
+	let newCards = [...originalCards];
+	console.log('filtering with: ',filterText, filterDiff, onlyFavorites, faveCardIds);
+	if (onlyFavorites) {
+		newCards = newCards.filter(card => {console.log('id', card.id); return faveCardIds.includes(card.id)});
+	}
+	if (filterDiff !== '') {
+		newCards = newCards.filter(card => (card.difficulty === filterDiff));
+	}
+	if (filterText.length > 2) {
+		newCards = newCards.filter(card => (card.title.toLowerCase().includes(filterText.toLowerCase())
+			|| card.description.toLowerCase().includes(filterText.toLowerCase())));
+	}
+	return newCards;
+}
+
 export function Filters({
-	filterCards,
 	setDisplayedCards,
 	originalCards,
 	faveCardIds,
@@ -19,7 +40,7 @@ export function Filters({
 	return (
 		<div className="filters-container">
 			<TextField
-				label="Filter"
+				label="Filter by text"
 				value={filterInput}
 				onChange={(e) => {
 					const newInput = e.target.value;
@@ -53,14 +74,14 @@ export function Filters({
 			</FormControl>
 			<div className="flex favorites-filter-holder">
 				<div
-					className="centered half-width"
+					className="subtitle centered half-width"
 					onClick={() => {
 						setOnlyFavorites(false);
 						const newDisplay = filterCards(originalCards, faveCardIds, filterInput, difficultySelection, false);
 						setDisplayedCards(newDisplay);
 					}}
 				>
-					<span style={{ textDecoration: onlyFavorites?'none':'underline' }}>Everything</span>
+					<span style={{ textDecorationThickness: '3px', textDecoration: onlyFavorites?'none':'underline 3px' }}>Everything</span>
 				</div>
 				<Divider
 					orientation="vertical"
@@ -68,14 +89,14 @@ export function Filters({
 					flexItem
 				/>
 				<div
-					className="centered half-width"
+					className="subtitle centered half-width"
 					onClick={() => {
 						setOnlyFavorites(true);
 						const newDisplay = filterCards(originalCards, faveCardIds, filterInput, difficultySelection, true);
 						setDisplayedCards(newDisplay);
 					}}
 				>
-					<span style={{ textDecoration: onlyFavorites?'underline':'none' }}>Favorites</span>
+					<span style={{ textDecoration: onlyFavorites?'underline 3px':'none' }}>Favorites</span>
 				</div>
 			</div>
 		</div>

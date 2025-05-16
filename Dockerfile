@@ -1,6 +1,9 @@
 FROM node:20-alpine AS development-dependencies-env
 COPY . /app
 WORKDIR /app
+RUN pip install djangorestframework
+RUN pip install django-cors-headers
+RUN pip install notion-client
 RUN npm ci
 
 FROM node:20-alpine AS production-dependencies-env

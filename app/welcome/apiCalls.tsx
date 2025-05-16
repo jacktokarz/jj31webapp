@@ -1,17 +1,33 @@
+const apiBase = 'http://127.0.0.1:8000';
+
+async function callApi(argument) {
+	const response = await fetch(`${apiBase}/${argument}/`);
+	const jsonResponse = response.json();
+	return jsonResponse;
+}
+
+export async function getCards() {
+	const allCards = await callApi('cards');
+	return allCards;
+}
+
 export async function postFavorite() {
 	// adds a card id to the team's favorite list
 }
 
-export async function getTeamNames() {
-	// get all team names / passwords
+export async function getTeams() {
+	const allTeams = await callApi('teams');
+	return allTeams;
 }
 
-export async function getTeamData() {
-	// gets data by team id(?)
+export async function getTeamData(id) {
+	const teamData = await callApi(`teams/${id}`);
+	return teamData;
 }
 
 export async function getQuestions() {
-	console.log('getting questions. this is async...');
+	const allQuestions = await callApi('questions');
+	return allQuestions;
 }
 
 export async function postQuestion() {
