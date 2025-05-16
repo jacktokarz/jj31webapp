@@ -1,6 +1,7 @@
 from scavhunt.fetcher import Fetcher
 from notion_client import Client, AsyncClient
 import scavhunt.local_schema as sc
+import scavhunt.leaderboard as lb
 import os
 import threading as th
 import time
@@ -11,18 +12,8 @@ with open(os.path.dirname(os.path.realpath(__file__)) + "/etc/notion_key.txt") a
 notion = Client(auth=notion_key)
 anotion = AsyncClient(auth=notion_key)
 
-# print(notion.databases.query("1ed212ab885680ec85eed3c8d79109c0"))
 
-
-prq = LifoQueue()
-crq = LifoQueue()
-qrq = LifoQueue()
-trq = LifoQueue()
-# t1 = th.Thread(target=update_results, args = (prq, crq, qrq, trq))
-# t2 = th.Thread(target=print_some_results, args = (prq, crq, qrq, trq))
 print("Starting up!")
-# t1.start()
-# t2.start()
 
 class NotionFetcher(Fetcher):
 
@@ -134,12 +125,181 @@ class NotionFetcher(Fetcher):
                                    'plain_text': 'Special card', 'href': None}]
                               }
                     }, 'url': 'https://www.notion.so/Special-card-1f0212ab885680e6905fda800fad1b3b', 'public_url': None}, {'object': 'page', 'id': '1f0212ab-8856-80f2-8160-e650f5ab409a', 'created_time': '2025-05-11T14:55:00.000Z', 'last_edited_time': '2025-05-11T14:55:00.000Z', 'created_by': {'object': 'user', 'id': '969024ab-610b-48f6-802f-c96f18d94181'}, 'last_edited_by': {'object': 'user', 'id': '969024ab-610b-48f6-802f-c96f18d94181'}, 'cover': None, 'icon': None, 'parent': {'type': 'database_id', 'database_id': '1ed212ab-8856-8070-babe-ea276dad7af3'}, 'archived': False, 'in_trash': False, 'properties': {'Team Favorite Card': {'id': '%3EN%3Bd', 'type': 'relation', 'relation': [], 'has_more': False}, 'Description': {'id': '%3EO%40T', 'type': 'rich_text', 'rich_text': [{'type': 'text', 'text': {'content': 'Description of Goodbye world', 'link': None}, 'annotations': {'bold': False, 'italic': False, 'strikethrough': False, 'underline': False, 'code': False, 'color': 'default'}, 'plain_text': 'Description of Goodbye world', 'href': None}]}, 'Team Completed Cards': {'id': 'Xrre', 'type': 'relation', 'relation': [], 'has_more': False}, 'Points': {'id': '%7DpxD', 'type': 'number', 'number': 90}, 'Name': {'id': 'title', 'type': 'title', 'title': [{'type': 'text', 'text': {'content': 'Goodbye world!', 'link': None}, 'annotations': {'bold': False, 'italic': False, 'strikethrough': False, 'underline': False, 'code': False, 'color': 'default'}, 'plain_text': 'Goodbye world!', 'href': None}]}}, 'url': 'https://www.notion.so/Goodbye-world-1f0212ab885680f28160e650f5ab409a', 'public_url': None}, {'object': 'page', 'id': '1f0212ab-8856-80c4-8590-dd06d0a4cd60', 'created_time': '2025-05-11T14:46:00.000Z', 'last_edited_time': '2025-05-11T14:55:00.000Z', 'created_by': {'object': 'user', 'id': '969024ab-610b-48f6-802f-c96f18d94181'}, 'last_edited_by': {'object': 'user', 'id': '969024ab-610b-48f6-802f-c96f18d94181'}, 'cover': None, 'icon': None, 'parent': {'type': 'database_id', 'database_id': '1ed212ab-8856-8070-babe-ea276dad7af3'}, 'archived': False, 'in_trash': False, 'properties': {'Team Favorite Card': {'id': '%3EN%3Bd', 'type': 'relation', 'relation': [], 'has_more': False}, 'Description': {'id': '%3EO%40T', 'type': 'rich_text', 'rich_text': [{'type': 'text', 'text': {'content': 'Description of Hello world', 'link': None}, 'annotations': {'bold': False, 'italic': False, 'strikethrough': False, 'underline': False, 'code': False, 'color': 'default'}, 'plain_text': 'Description of Hello world', 'href': None}]}, 'Team Completed Cards': {'id': 'Xrre', 'type': 'relation', 'relation': [], 'has_more': False}, 'Points': {'id': '%7DpxD', 'type': 'number', 'number': 30}, 'Name': {'id': 'title', 'type': 'title', 'title': [{'type': 'text', 'text': {'content': 'Hello world!', 'link': None}, 'annotations': {'bold': False, 'italic': False, 'strikethrough': False, 'underline': False, 'code': False, 'color': 'default'}, 'plain_text': 'Hello world!', 'href': None}]}}, 'url': 'https://www.notion.so/Hello-world-1f0212ab885680c48590dd06d0a4cd60', 'public_url': None}], 'next_cursor': None, 'has_more': False, 'type': 'page_or_database', 'page_or_database': {}, 'request_id': '299c99b2-282a-4b6b-9e14-3db943752118'}
+        self.timeline_result = {
+    "object": "list",
+    "results": [
+        {
+            "object": "page",
+            "id": "1f4212ab-8856-80e9-b0f7-ea185443ae2d",
+            "created_time": "2025-05-15T22:31:00.000Z",
+            "last_edited_time": "2025-05-15T22:31:00.000Z",
+            "created_by": {
+                "object": "user",
+                "id": "969024ab-610b-48f6-802f-c96f18d94181"
+            },
+            "last_edited_by": {
+                "object": "user",
+                "id": "969024ab-610b-48f6-802f-c96f18d94181"
+            },
+            "cover": None,
+            "icon": None,
+            "parent": {
+                "type": "database_id",
+                "database_id": "1f4212ab-8856-8070-a0ed-de8d9ce3b437"
+            },
+            "archived": False,
+            "in_trash": False,
+            "properties": {
+                "Asked Question": {
+                    "id": "LkHQ",
+                    "type": "relation",
+                    "relation": [
+                        {
+                            "id": "1e5212ab-8856-80e4-a744-ebd9b739a29b"
+                        }
+                    ],
+                    "has_more": False
+                },
+                "Completed Card": {
+                    "id": "e~gH",
+                    "type": "relation",
+                    "relation": [],
+                    "has_more": False
+                },
+                "Additional Points": {
+                    "id": "tUux",
+                    "type": "number",
+                    "number": None
+                },
+                "Teams": {
+                    "id": "zagu",
+                    "type": "relation",
+                    "relation": [
+                        {
+                            "id": "1f0212ab-8856-807b-acfd-f3a8c7b45b53"
+                        }
+                    ],
+                    "has_more": False
+                },
+                "Name": {
+                    "id": "title",
+                    "type": "title",
+                    "title": [
+                        {
+                            "type": "text",
+                            "text": {
+                                "content": "Lost something",
+                                "link": None
+                            },
+                            "annotations": {
+                                "bold": False,
+                                "italic": False,
+                                "strikethrough": False,
+                                "underline": False,
+                                "code": False,
+                                "color": "default"
+                            },
+                            "plain_text": "Lost something",
+                            "href": None
+                        }
+                    ]
+                }
+            },
+            "url": "https://www.notion.so/Lost-something-1f4212ab885680e9b0f7ea185443ae2d",
+            "public_url": None
+        },
+        {
+            "object": "page",
+            "id": "1f4212ab-8856-802b-86df-d288d7d55b3d",
+            "created_time": "2025-05-15T22:30:00.000Z",
+            "last_edited_time": "2025-05-15T22:31:00.000Z",
+            "created_by": {
+                "object": "user",
+                "id": "969024ab-610b-48f6-802f-c96f18d94181"
+            },
+            "last_edited_by": {
+                "object": "user",
+                "id": "969024ab-610b-48f6-802f-c96f18d94181"
+            },
+            "cover": None,
+            "icon": None,
+            "parent": {
+                "type": "database_id",
+                "database_id": "1f4212ab-8856-8070-a0ed-de8d9ce3b437"
+            },
+            "archived": False,
+            "in_trash": False,
+            "properties": {
+                "Asked Question": {
+                    "id": "LkHQ",
+                    "type": "relation",
+                    "relation": [],
+                    "has_more": False
+                },
+                "Completed Card": {
+                    "id": "e~gH",
+                    "type": "relation",
+                    "relation": [],
+                    "has_more": False
+                },
+                "Additional Points": {
+                    "id": "tUux",
+                    "type": "number",
+                    "number": 200
+                },
+                "Teams": {
+                    "id": "zagu",
+                    "type": "relation",
+                    "relation": [
+                        {
+                            "id": "1f0212ab-8856-807b-acfd-f3a8c7b45b53"
+                        }
+                    ],
+                    "has_more": False
+                },
+                "Name": {
+                    "id": "title",
+                    "type": "title",
+                    "title": [
+                        {
+                            "type": "text",
+                            "text": {
+                                "content": "Base points",
+                                "link": None
+                            },
+                            "annotations": {
+                                "bold": False,
+                                "italic": False,
+                                "strikethrough": False,
+                                "underline": False,
+                                "code": False,
+                                "color": "default"
+                            },
+                            "plain_text": "Base points",
+                            "href": None
+                        }
+                    ]
+                }
+            },
+            "url": "https://www.notion.so/Base-points-1f4212ab8856802b86dfd288d7d55b3d",
+            "public_url": None
+        }
+    ],
+    "next_cursor": None,
+    "has_more": False,
+    "type": "page_or_database",
+    "page_or_database": {},
+    "developer_survey": "https://notionup.typeform.com/to/bllBsoI4?utm_source=postman",
+    "request_id": "faca8cf6-b180-4fcc-abc1-e3ff6f2b92d3"
+}
+        self.leaderboard = lb.Leaderboard([], [])
         prq = LifoQueue()
         crq = LifoQueue()
         qrq = LifoQueue()
         trq = LifoQueue()
-        t1 = th.Thread(target=self.fetch_online_results, args = (prq, crq, qrq, trq), daemon=True)
-        t2 = th.Thread(target=self.store_results, args = (prq, crq, qrq, trq), daemon=True)
+        tlq = LifoQueue()
+        t1 = th.Thread(target=self.fetch_online_results, args = (prq, crq, qrq, trq, tlq), daemon=True)
+        t2 = th.Thread(target=self.store_results, args = (prq, crq, qrq, trq, tlq), daemon=True)
         t1.start()
         t2.start()
 
@@ -168,11 +328,15 @@ class NotionFetcher(Fetcher):
         for a_team in self.team_result['results']:
             team = self.team_parser(a_team)
             if team.id == id:
+                self.get_accurate_team_cards([team], self.get_all_cards())
                 return team
         return None
 
     def get_all_teams(self) -> list[sc.Team]:
-        return self.team_rel_to_list(self.team_result['results'])
+        teams = self.team_rel_to_list(self.team_result['results'])
+        cards = self.get_all_cards()
+        self.get_accurate_team_cards(teams, cards)
+        return teams
 
     def get_card(self, id: str) -> sc.Card:
         for a_card in self.card_result['results']:
@@ -184,13 +348,27 @@ class NotionFetcher(Fetcher):
     def get_all_cards(self) -> list[sc.Card]:
         return self.card_rel_to_list(self.card_result['results'])
     
+    def get_all_timelines(self) -> list[sc.Timeline]:
+        return self.timeline_rel_to_list(self.timeline_result['results'])
+ 
     def card_parser(self, cr):
         prop = cr['properties']
         id = cr['id']
-        title = prop['Name']['title'][0]['plain_text']
+        if id is None:
+            return sc.Card("Null", "Null Card", "Invalid Card", 0, [])
+        title_try = prop['Name']['title']
+        title = title_try[0]['plain_text'] if len(title_try) > 0 else ""
         desc = prop['Description']['rich_text'][0]['plain_text']
         points = prop['Points']['number']
-        return sc.Card(id, title, desc, points)
+        difficulty = ''
+        if 'Difficulty' in prop:
+            difficulty = prop['Difficulty']['select']
+            if difficulty is not None:
+                difficulty = difficulty['name']
+        team_ids = []
+        for result in prop['Team Completed Cards']['relation']:
+            team_ids.append(result['id'])
+        return sc.Card(id, title, desc, points, team_ids, difficulty)
 
     def card_rel_to_list(self, cards_object):
         cards = []
@@ -203,7 +381,10 @@ class NotionFetcher(Fetcher):
     def question_parser(self, qr):
         prop = qr['properties']
         id = qr['id']
-        title = prop['Name']['title'][0]['plain_text']
+        if id is None:
+            return sc.Question("Null", "In progress question", "Still in progress", 0, "Null", False)
+        title_try = prop['Name']['title']
+        title = title_try[0]['plain_text'] if len(title_try) > 0 else ""
         desc = ''
         if len(prop['Description']['rich_text']) > 0:
             desc = prop['Description']['rich_text'][0]['plain_text']
@@ -253,7 +434,17 @@ class NotionFetcher(Fetcher):
     def team_parser(self, tr):
         prop = tr['properties']
         id = tr['id']
-        name = prop['Name']['title'][0]['plain_text']
+        if id is None:
+            return sc.Team("None", [], "Null Team", 0, [], [], [])
+        title_try = prop['Name']['title']
+        name = title_try[0]['plain_text'] if len(title_try) > 0 else ""
+        key = ''
+        if 'Key' in prop:
+            if len(prop['Key']['rich_text']) > 0:
+                key = prop['Key']['rich_text'][0]['plain_text']
+        discord_id = 0
+        if 'Discord Channel' in prop:
+            prop['Discord Channel']['number']
         players_object = prop['Players']['relation']
         compl_cards_object = prop['Completed Cards']['relation']
         fav_cards_object = prop['Favorite Cards']['relation']
@@ -263,30 +454,114 @@ class NotionFetcher(Fetcher):
         compl_cards = self.card_rel_to_list(compl_cards_object)
         fav_cards = self.card_rel_to_list(fav_cards_object)
         ask_quest = self.ques_rel_to_list(ask_quest_object)
-        return sc.Team(id, players, name, points, compl_cards, fav_cards, ask_quest)
+        return sc.Team(id, players, name, points, compl_cards, fav_cards, ask_quest, discord_id, key)
+    
+    def timeline_parser(self, tr):
+        prop = tr['properties']
+        id = tr['id']
+        if id is None:
+            return (sc.Timeline("None", "In progress", 0))
+        title_try = prop['Name']['title']
+        name = title_try[0]['plain_text'] if len(title_try) > 0 else ""
+        additional_points = prop['Additional Points']['number']
+        teams_relations = prop['Teams']['relation']
+        ask_quest_object = prop['Asked Question']['relation']
+        teams = self.team_rel_to_list(teams_relations)
+        ask_quests = self.ques_rel_to_list(ask_quest_object)
+        team = None
+        ask_quest = None
+        if len(teams) > 0:
+            team = teams[0]
+        if len(ask_quests) > 0:
+            ask_quest = ask_quests[0]
+        if additional_points is None:
+            additional_points = 0
+        
+        return sc.Timeline(id, name, additional_points,  team, ask_quest)
+    
+    def get_timeline(self, id: str) -> sc.Team:
+        for a_time in self.timeline_result['results']:
+            the_time = self.timeline_parser(a_time)
+            if the_time.id == id:
+                return the_time
+        return None
 
-    def fetch_online_results(self, prq: Queue, crq: Queue, qrq: Queue, trq: Queue):
+    def timeline_rel_to_list(self, timeline_object):
+        timelines = []
+        for object in timeline_object:
+            times = self.get_timeline(object['id'])
+            if times is not None:
+                timelines.append(times)
+        return timelines
+
+
+    def fetch_online_results(self, prq: Queue, crq: Queue, qrq: Queue, trq: Queue, tlq: Queue):
+        total_sleep_count = 3
         while True:
             up_pr = notion.databases.query("1ed212ab8856800caf60d3aea6b255d9")
-            time.sleep(3)
+            time.sleep(total_sleep_count)
             up_cr = notion.databases.query("1ed212ab88568070babeea276dad7af3")
-            time.sleep(3)
+            time.sleep(total_sleep_count)
             up_qr = notion.databases.query("1e5212ab8856802ca014d865b47bb655")
-            time.sleep(3)
+            time.sleep(total_sleep_count)
             up_tr = notion.databases.query("1ed212ab885680ec85eed3c8d79109c0")
-            time.sleep(3)
+            time.sleep(total_sleep_count)
+            up_tl = notion.databases.query("1f4212ab88568070a0edde8d9ce3b437")
             trq.put(up_tr)
             prq.put(up_pr)
             qrq.put(up_qr)
             crq.put(up_cr)
+            tlq.put(up_tl)
     
-    def store_results(self, prq: Queue, crq: Queue, qrq: Queue, trq: Queue):
+    def store_results(self, prq: Queue, crq: Queue, qrq: Queue, trq: Queue, tlq: Queue):
         while True:
             self.people_result = prq.get()
             self.card_result = crq.get()
             self.question_result = qrq.get()
             self.team_result = trq.get()
+            self.timeline_result = tlq.get()
+            self.update_points(self.get_all_timelines(), self.get_all_teams())
             time.sleep(1)
             print("------------New Print Cycle---------------")
 
+    def get_accurate_team_cards(self, teams: list[sc.Team], cards: list[sc.Card]):
+        for team in teams:
+            team.get_accurate_completed(cards)
+    
+    def update_points(self, timeline: list[sc.Timeline], teams: list[sc.Team]):
+        all_changes = self.leaderboard.calculate_points(timeline, teams)
+        point_dif = all_changes[1]
+        print(point_dif)
+        for team_id, points in point_dif.items():
+            properties = {
+                'Points': points['new_points']
+            }
+            notion.pages.update(team_id, properties=properties)
 
+
+    def favorite_question(self, team_id, card_id):
+        print("We're at notion fetcher with the team and card ids")
+        relations = notion.pages.properties.retrieve(team_id, "SI_B")
+        ids = []
+        for result in relations["results"]:
+            ids.append({"id": result["relation"]["id"] })
+        ids.append({"id": card_id})
+        properties = {
+            'Favorite Cards': {
+                "relation": ids
+            }
+        }
+        notion.pages.update(team_id, properties=properties)
+
+    def unfavorite_question(self, team_id, card_id):
+        relations = notion.pages.properties.retrieve(team_id, "SI_B")
+        ids = []
+        for result in relations["results"]:
+            if (card_id != result["relation"]["id"]):
+                ids.append({"id": result["relation"]["id"] })
+        properties = {
+            'Favorite Cards': {
+                "relation": ids
+            }
+        }
+        notion.pages.update(team_id, properties=properties)

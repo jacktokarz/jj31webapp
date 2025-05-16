@@ -14,14 +14,18 @@ class Card():
                  id: str,
                  title: str,
                  description: str,
-                 value: int):
+                 value: int,
+                 team_ids: list[str] = [],
+                 difficulty: str = "Easy"):
         self.id = id
         self.title = title
         self.description = description
         self.value = value
+        self.team_ids = team_ids
+        self.difficulty = difficulty
     
     def __str__(self):
-        return "Card\n  Id: " + self.id + "\n  Title: " + self.title + "\n  Description: " + self.description + "\n  Points: " + str(self.value)
+        return "Card\n  Id: " + self.id + "\n  Title: " + self.title + "\n  Description: " + self.description + "\n  Points: " + str(self.value) + "\n  DifficultY: " + self.difficulty
 
 
 class Question():
@@ -52,7 +56,9 @@ class Team():
                  points: int,
                  completed_cards: list[Card],
                  favorite_cards: list[Card],
-                 asked_questions: list[Question]):
+                 asked_questions: list[Question],
+                 discord_id: int = 1372019348364853308,
+                 key: str = "a"):
         self.id = id
         self.players = players
         self.name = name
@@ -60,6 +66,17 @@ class Team():
         self.completed_cards = completed_cards
         self.favorite_cards = favorite_cards
         self.asked_questions = asked_questions
+        if discord_id != 0:
+            self.discord_id = discord_id
+        else:
+            self.discord_id = 1372019348364853308
+        self.key = key
+    
+    def get_accurate_completed(self, cards: list[Card]):
+        self.completed_cards = []
+        for card in cards:
+            if self.id in card.team_ids:
+                self.completed_cards.append(card)
     
     def __str__(self):
         string = "Team!\n  Id: " + self.id + "\n  Name: " + self.name + "\n  Points: " + str(self.points)
@@ -77,3 +94,28 @@ class Team():
             string = string + str(quest) + "\n"
         return string
         
+class Timeline():
+
+    def __init__(self, id: str, name: str, points: int, team: Team = None, question: Question = None):
+        self.id = id
+        self.name = name
+        self.points = points
+        self.team = team
+        self.question = question
+
+    def get_total_points(self):
+        qc = 0 if self.question is None else self.question.cost
+        return self.points - qc
+    
+    def __str__(self):
+        return f"""
+Timeline!
+---------
+Id: {self.id}
+Name: {self.name}
+Points: {self.points}
+--------
+Team: {self.team}
+---------
+Question: {self.team}
+"""

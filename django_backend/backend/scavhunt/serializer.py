@@ -1,5 +1,4 @@
 from rest_framework import serializers
-import scavhunt.local_schema as schem
 
 class PlayerSerializer(serializers.Serializer):
     id = serializers.CharField(read_only=True)
@@ -10,6 +9,8 @@ class CardSerializer(serializers.Serializer):
     title = serializers.CharField()
     description = serializers.CharField()
     value = serializers.IntegerField()
+    team_ids = serializers.ListField()
+    difficulty = serializers.CharField()
 
 class CategorySerializer(serializers.Serializer):
     id = serializers.IntegerField()
@@ -27,6 +28,8 @@ class TeamSerializer(serializers.Serializer):
     players = PlayerSerializer(many=True)
     name = serializers.CharField()
     points = serializers.IntegerField()
+    discord_id = serializers.IntegerField()
     completed_cards = CardSerializer(many=True)
     favorite_cards = CardSerializer(many=True)
     asked_questions = QuestionSerializer(many=True)
+    key = serializers.CharField()
