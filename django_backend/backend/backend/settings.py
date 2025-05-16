@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'scavhunt',
-    'corsheaders'
 ]
 
 CORS_ALLOWED_ORIGINS = []
