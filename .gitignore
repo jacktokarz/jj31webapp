@@ -9,7 +9,9 @@
 /django_backend/backend/etc/secret_key.txt
 /django_backend/backend/etc/notion_key.txt
 /django_backend/backend/scavhunt/etc/notion_key.txt
+/django_backend/backend/scavhunt/etc/discord_token.txt
 *.pyc
 
 #VS Code
 /.vscode/
+django_backend/backend/db.sqlite3

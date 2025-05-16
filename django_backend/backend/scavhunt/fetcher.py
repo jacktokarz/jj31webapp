@@ -28,3 +28,9 @@ class Fetcher:
 
     def get_all_cards(self) -> list[sc.Card]:
         raise NotImplementedError
+    
+    def favorite_question(self, team_id, card_id):
+        pass
+
+    def unfavorite_question(self, team_id, card_id):
+        pass

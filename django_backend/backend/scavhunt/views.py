@@ -1,6 +1,7 @@
-from django.http import JsonResponse, Http404
-import scavhunt.local_schema as schem
+from django.http import JsonResponse, Http404, HttpResponse, HttpResponseBadRequest
+from rest_framework.decorators import api_view
 import scavhunt.serializer as sl
+import scavhunt.discordsender as ds
 from scavhunt.fetcherprovider import FetcherProvider
 
 # Create your views here.
@@ -45,7 +46,7 @@ def question_list(request):
         serializer = sl.QuestionSerializer(fetcher.get_all_questions(), many = True)
         return JsonResponse(serializer.data, safe=False)
     
-
+@api_view(['GET', 'POST'])
 def question_detail(request, id):
     question = fetcher.get_question(id)
 
@@ -55,6 +56,37 @@ def question_detail(request, id):
     if request.method == 'GET':
         serialized = sl.QuestionSerializer(question)
         return JsonResponse(serialized.data)
+    
+    if request.method == 'POST':
+        sender = ds.DiscordSender()
+        sender.post_question(question, request.data["team_id"], "")
+        return HttpResponse("Success")
+
+@api_view(['POST'])
+def card_favorite(request, id):
+    card = fetcher.get_card(id)
+
+    if card == None:
+        raise Http404
+    
+    if request.method == 'POST':
+        if (request.data["team_id"] is None):
+            raise HttpResponseBadRequest
+        fetcher.favorite_question(request.data["team_id"], id)
+        return HttpResponse("Success")
+    
+def card_unfavorite(request, id):
+    card = fetcher.get_card(id)
+
+    if card == None:
+        raise Http404
+    
+    if request.method == 'POST':
+        if (request.data["team_id"] is None):
+            raise HttpResponseBadRequest
+        fetcher.favorite_question(request.data["team_id"], id)
+        return HttpResponse("Success")
+
     
 def team_list(request):
 
