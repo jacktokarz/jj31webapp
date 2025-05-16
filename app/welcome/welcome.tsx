@@ -1,38 +1,17 @@
 import { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
+
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
 import { Cards } from './Cards';
 import { QuestionStore } from './QuestionStore';
 import { Rules } from './Rules';
+import { getCards, getTeams, getTeamData } from './apiCalls';
 
 
-const cardsDummyData = [
-	{
-		id: 1,
-		name: "JJ Birthday!",
-		description: "Celebrate JJ birthday",
-		difficulty: "Easy",
-		pointValue: 10,
-	},
-	{
-		id: 2,
-		name: "More Birthday!!!",
-		description: "Celebrate HARDER >:o",
-		difficulty: "Hard",
-		pointValue: 20,
-	},
-	{
-		id: 3,
-		name: "Most Bday?",
-		description: "Could there be more celebrating???",
-		difficulty: "Medium",
-		pointValue: 1,
-	},
-];
 
-
-function PasswordPrompt({ allTeamsData, setTeamData, setDisplayedPage }) {
+function PasswordPrompt({ allTeamsData, setTeamData, setDisplayedPage, setCookie }) {
 	const [enteredPassword, setEnteredPassword] = useState('');
 	const [errorIsHidden, setErrorIsHidden] = useState(true);
 	return (
@@ -67,6 +46,7 @@ function PasswordPrompt({ allTeamsData, setTeamData, setDisplayedPage }) {
 						if (team.password === enteredPassword) {
 							setErrorIsHidden(true);
 							setTeamData(team);
+							setCookie('loggedInUser', team);
 							setDisplayedPage('cards');
 							return;
 						}
@@ -84,35 +64,46 @@ export function Welcome({
 	displayedPage,
 	setDisplayedPage,
 }) {
-	const [allTeamsData, setAllTeamsData] = useState([{
-		teamName: "Team Name",
-		points: 69,
-		password: 'a',
-		favoritedCardIds: [1],
-		completedCardIds: [2]
-	}]);
-	const [teamData, setTeamData] = useState({});
-	const [cardsData, setCardsData] = useState(cardsDummyData);
+	const [cookies, setCookie] = useCookies<'loggedInUser', CookieValues>(['loggedInUser']);
+	const [allTeamsData, setAllTeamsData] = useState([]);
+	const [teamData, setTeamData] = useState(cookies.loggedInUser);
+	const [cardsData, setCardsData] = useState([]);
+	const [questionsData, setQuestionsData] = useState([]);
 	
 	useEffect(() => {
-			// call to API gets allTeamsData, then sets it.
-		});
+			async function callGetAllData() {
+				const newCards = await getCards();
+				console.log('setting cardsData to: ',newCards);
+				setCardsData(newCards);
+				if (loggedInUser !== null) {
+					const newTeam = await getTeamData(loggedInUser.id);
+					console.log('setting teamData to: ', newTeam);
+					setTeamData(newTeam);
+				}
+			}
+			callGetAllData();
+			setInterval(function(){
+				callGetAllData();
+			}, 30000)
+		}, []);
 	useEffect(() => {
-		// call to API gets teamData, then sets it.
-		// this is called every 30 seconds?
-		// starting when teamData is first updated
-	});
-	useEffect(() => {
-		// call to API to get cardsData. This only happens once?
-		// or also happens when they click favorite?
-	});
+		async function callGetDataOnce() {
+			const newTeams = await getTeams();
+			console.log('setting teamsData to: ', newTeams);
+			setAllTeamsData(newTeams);
+			const newQuestions = await getQuestions();
+			console.log('setting questionsData to: ', newQuestions);
+			setQuestionsData(newQuestions);
+		}
+		callGetDataOnce();
+	}, []);
 	
 	switch(displayedPage) {
 		case 'rules':
 			return <Rules />;
 			break;
 		case 'question store':
-			return <QuestionStore teamData={teamData} />;
+			return <QuestionStore teamData={teamData} questionsData={questionsData} />;
 			break;
 		case 'cards':
 			return <Cards cardsData={cardsData} teamData={teamData} />;
@@ -120,6 +111,7 @@ export function Welcome({
 		default:
 			return (
 				<PasswordPrompt
+					setCookie={setCookie}
 					allTeamsData={allTeamsData}
 					setDisplayedPage={setDisplayedPage}
 					setTeamData={setTeamData}

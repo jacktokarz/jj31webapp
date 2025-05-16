@@ -7,8 +7,29 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 
 
+function filterCards(
+	originalCards,
+	faveCardIds,
+	filterText,
+	filterDiff,
+	onlyFavorites,
+) {
+	let newCards = [...originalCards];
+	console.log('filtering with: ',filterText, filterDiff, onlyFavorites, faveCardIds);
+	if (onlyFavorites) {
+		newCards = newCards.filter(card => {console.log('id', card.id); return faveCardIds.includes(card.id)});
+	}
+	if (filterDiff !== '') {
+		newCards = newCards.filter(card => (card.difficulty === filterDiff));
+	}
+	if (filterText.length > 2) {
+		newCards = newCards.filter(card => (card.title.toLowerCase().includes(filterText.toLowerCase())
+			|| card.description.toLowerCase().includes(filterText.toLowerCase())));
+	}
+	return newCards;
+}
+
 export function Filters({
-	filterCards,
 	setDisplayedCards,
 	originalCards,
 	faveCardIds,

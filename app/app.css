@@ -125,6 +125,13 @@ main {
 	text-shadow: 2px 2px violet;
 }
 
+.question-holder {
+	border-radius: 20px;
+  padding: 16px 16px 2px 16px;
+  background-color: linen;
+  box-shadow: 3px 3px 8px lightblue;
+}
+
 .vertical-align {
 	vertical-align: middle;
 }

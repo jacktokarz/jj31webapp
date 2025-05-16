@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useCookies } from 'react-cookie';
 import {
   isRouteErrorResponse,
   Links,
@@ -44,7 +45,8 @@ function Footer({ setDisplayedPage }) {
 };
 
 export function Layout() {
-	const [displayedPage, setDisplayedPage] = useState('welcome');
+	const [cookies] = useCookies<'loggedInUser', CookieValues>(['loggedInUser']);
+	const [displayedPage, setDisplayedPage] = useState(cookies.loggedInUser === null ? '' : 'cards');
 	
   return (
     <html lang="en">
@@ -57,6 +59,7 @@ export function Layout() {
       <body>
 				<main className="centered">
 					<Welcome
+						loggedInUser={cookies.loggedInUser}
 						displayedPage={displayedPage}
 						setDisplayedPage={setDisplayedPage}
 					/>
@@ -70,7 +73,11 @@ export function Layout() {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+		<CookiesProvider>
+			<Outlet />
+		</CookiesProvider>
+	);
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
