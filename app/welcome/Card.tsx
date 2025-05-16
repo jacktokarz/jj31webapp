@@ -9,21 +9,48 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import Divider from '@mui/material/Divider';
 
 import { CoinIcon } from './CoinIcon';
+import { postFavorite, postUnfavorite } from './apiCalls';
 
 export function ChallengeCard({
-	faveCardIds,
-	updateFavorites,
-	id,
-	title,
-	difficulty,
-	value,
-	description,
+	teamData,
+	setTeamData,
+	card,
 }) {
+	const faveCardIds = teamData.favorite_cards;
+	const {
+		id,
+		title,
+		difficulty,
+		value,
+		description,
+	} = card;
 	const [expanded, setExpanded] = useState<string | false>('panel1');
 	
 	const handleChange = (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
 		setExpanded(newExpanded ? panel : false);
 	};
+	
+	const removeFavorite = (id: string) => {
+		console.log('removing ', id);
+		const newFaveCardIds = [...faveCardIds];
+		const index = faveCardIds.find(id);
+		newFaveCardIds.splice(index, 1);
+		setTeamData({
+			...teamData,
+			favorite_cards: newFaveCardIds,
+		});
+		postUnfavorite(id, teamData.id);
+	}
+	
+	const addFavorite = (id: string) => {
+		console.log('adding fave ', id);
+		const newFaveCardIds = [...faveCardIds, id];
+		setTeamData({
+			...teamData,
+			favorite_cards: newFaveCardIds,
+		});
+		postFavorite(id, teamData.id);
+	}
 	
 	return (
 		<div className="card-container">
@@ -53,8 +80,8 @@ export function ChallengeCard({
 							{value}
 							<CoinIcon />
 							{faveCardIds.includes(id)
-								? <StarIcon onClick={() => updateFavorites(id)} className="absolute-right" />
-								: <StarBorderIcon onClick={() => updateFavorites(id)} className="absolute-right" />
+								? <StarIcon onClick={() => removeFavorite(id)} className="absolute-right" />
+								: <StarBorderIcon onClick={() => addFavorite(id)} className="absolute-right" />
 							}
 							
 						</div>

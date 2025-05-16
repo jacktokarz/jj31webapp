@@ -7,13 +7,7 @@ import { type Team } from '../types/Team';
 import { WelcomeHeader} from './WelcomeHeader';
 
 
-function updateFavorites(id) {
-	console.log("send API call to update team's favorites list with ",id);
-	console.log("temporarily update local version of team data to uinclude or not include this id");
-}
-
-
-export function Cards({ cardsData, teamData }) {
+export function Cards({ cardsData, teamData, setTeamData }) {
 	const originalCards = cardsData.filter((card) => !teamData.completed_cards.includes(card.id));
 	const [displayedCards, setDisplayedCards] = useState([...originalCards]);
 	
@@ -37,13 +31,9 @@ export function Cards({ cardsData, teamData }) {
 					return (
 						<ChallengeCard
 							key={card.id}
-							faveCardIds={teamData.favorite_cards}
-							updateFavorites={updateFavorites}
-							id={card.id}
-							title={card.title}
-							difficulty={card.difficulty}
-							value={card.value}
-							description={card.description}
+							teamData={teamData}
+							setTeamData={setTeamData}
+							card={card}
 						/>
 					)
 				})}

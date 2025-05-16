@@ -6,13 +6,24 @@ async function callApi(argument) {
 	return jsonResponse;
 }
 
+async function postApi(argument, body) {
+	const response = await fetch(`${apiBase}/${argument}/`,
+		{
+		  method: "POST",
+			headers: {
+	      'Accept': 'application/json',
+	      'Content-Type': 'application/json'
+	    },
+		  body: JSON.stringify(body),
+		}
+	);
+	const jsonResponse = response.json();
+	return response;
+}
+
 export async function getCards() {
 	const allCards = await callApi('cards');
 	return allCards;
-}
-
-export async function postFavorite() {
-	// adds a card id to the team's favorite list
 }
 
 export async function getTeams() {
@@ -30,6 +41,14 @@ export async function getQuestions() {
 	return allQuestions;
 }
 
-export async function postQuestion() {
-	console.log('posting....');
+export async function postFavorite(cardId, teamId) {
+	const response = await postApi(`cards/${cardId}/favorite`, { team_id: teamId });
+}
+
+export async function postUnfavorite(cardId, teamId) {
+	const response = await postApi(`cards/${cardId}/unfavorite`, { team_id: teamId });
+}
+
+export async function postQuestion(questionId, teamId) {
+	const response = await postApi(`questions/${questionId}`, { team_id: teamId });
 }

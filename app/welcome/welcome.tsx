@@ -100,7 +100,7 @@ export function Welcome({
 			return <QuestionStore teamData={teamData} questionsData={questionsData} />;
 			break;
 		case 'cards':
-			return <Cards cardsData={cardsData} teamData={teamData} />;
+			return <Cards cardsData={cardsData} teamData={teamData} setTeamData={setTeamData} />;
 			break;
 		default:
 			return (

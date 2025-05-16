@@ -46,7 +46,7 @@ function WaitModal({ waitModalOpen, setWaitModalOpen }) {
 function ConfirmModal({
 	confirmModalData,
 	setConfirmModalData,
-	teamName,
+	teamId,
 	setWaitModalOpen,
 }) {
 	if (confirmModalData === null) {
@@ -81,7 +81,7 @@ function ConfirmModal({
 					className="centered"
 					variant="contained"
 					onClick={async () => {
-						await postQuestion(teamName, confirmModalData.question);
+						await postQuestion(confirmModalData.question.id, teamId);
 						setWaitModalOpen(true);
 						setConfirmModalData(null);
 					}}
@@ -159,7 +159,7 @@ export function QuestionStore({ teamData, questionsData }) {
 			<ConfirmModal
 				confirmModalData={confirmModalData}
 				setConfirmModalData={setConfirmModalData}
-				teamName={teamData.name}
+				teamId={teamData.id}
 				setWaitModalOpen={setWaitModalOpen}
 			/>
 			<WaitModal
