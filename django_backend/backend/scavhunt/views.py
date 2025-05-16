@@ -58,7 +58,7 @@ def question_detail(request, id):
     
     if request.method == 'POST':
         sender = ds.DiscordSender()
-        sender.post_question(question, request.data["team_id"], "")
+        sender.post_question(question, request.data["team_id"], request.data["details"])
         return HttpResponse("Success")
 
 @api_view(['POST'])
@@ -73,7 +73,8 @@ def card_favorite(request, id):
             raise HttpResponseBadRequest
         fetcher.favorite_question(request.data["team_id"], id)
         return HttpResponse("Success")
-    
+
+@api_view(['POST'])    
 def card_unfavorite(request, id):
     card = fetcher.get_card(id)
 
@@ -83,7 +84,7 @@ def card_unfavorite(request, id):
     if request.method == 'POST':
         if (request.data["team_id"] is None):
             raise HttpResponseBadRequest
-        fetcher.favorite_question(request.data["team_id"], id)
+        fetcher.unfavorite_question(request.data["team_id"], id)
         return HttpResponse("Success")
 
 
