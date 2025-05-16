@@ -44,7 +44,9 @@ export function ChallengeCard({
         <AccordionDetails>
 					<Divider style={{margin: '-16px 0 16px 0'}} />
 					<div className="card-details">
-						<div className="difficulty-label">
+						<div
+							className={`difficulty-label difficulty-${difficulty}`}
+						>
 							{difficulty}
 						</div>
 						<div>

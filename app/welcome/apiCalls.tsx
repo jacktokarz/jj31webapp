@@ -1,7 +1,7 @@
 const apiBase = 'http://127.0.0.1:8000';
 
 async function callApi(argument) {
-	const response = await fetch(`${apiBase}/${argument}`);
+	const response = await fetch(`${apiBase}/${argument}/`);
 	const jsonResponse = response.json();
 	return jsonResponse;
 }
@@ -16,7 +16,7 @@ export async function postFavorite() {
 }
 
 export async function getTeams() {
-	const allTeams = await callApi('teams/');
+	const allTeams = await callApi('teams');
 	return allTeams;
 }
 
@@ -26,7 +26,8 @@ export async function getTeamData(id) {
 }
 
 export async function getQuestions() {
-	console.log('getting questions. this is async...');
+	const allQuestions = await callApi('questions');
+	return allQuestions;
 }
 
 export async function postQuestion() {

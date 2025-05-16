@@ -13,21 +13,21 @@ function updateFavorites(id) {
 }
 
 
-export function Cards({ cardsData, teamData }) {	
-	const originalCards = cardsData.filter((card) => !teamData.completedCardIds.includes(card.id));
+export function Cards({ cardsData, teamData }) {
+	const originalCards = cardsData.filter((card) => !teamData.completed_cards.includes(card.id));
 	const [displayedCards, setDisplayedCards] = useState([...originalCards]);
 	
   return (
-    <div>
+    <div className="full-width">
 			<WelcomeHeader
-				titleText="JJ's 31st BDAY"
+				titleText="Challenge Cards"
 				pointValue={teamData.points}
-				teamName={teamData.teamName}
+				teamName={teamData.name}
 			/>
 			<Filters
 				setDisplayedCards={setDisplayedCards}
 				originalCards={originalCards}
-				faveCardIds={teamData.favoritedCardIds}
+				faveCardIds={teamData.favorite_cards}
 			/>
 			<Divider
 				orientation="horizontal"
@@ -37,7 +37,7 @@ export function Cards({ cardsData, teamData }) {
 					return (
 						<ChallengeCard
 							key={card.id}
-							faveCardIds={teamData.favoritedCardIds}
+							faveCardIds={teamData.favorite_cards}
 							updateFavorites={updateFavorites}
 							id={card.id}
 							title={card.title}

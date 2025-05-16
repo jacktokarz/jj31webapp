@@ -74,14 +74,14 @@ export function Filters({
 			</FormControl>
 			<div className="flex favorites-filter-holder">
 				<div
-					className="centered half-width"
+					className="subtitle centered half-width"
 					onClick={() => {
 						setOnlyFavorites(false);
 						const newDisplay = filterCards(originalCards, faveCardIds, filterInput, difficultySelection, false);
 						setDisplayedCards(newDisplay);
 					}}
 				>
-					<span style={{ textDecoration: onlyFavorites?'none':'underline' }}>Everything</span>
+					<span style={{ textDecorationThickness: '3px', textDecoration: onlyFavorites?'none':'underline 3px' }}>Everything</span>
 				</div>
 				<Divider
 					orientation="vertical"
@@ -89,14 +89,14 @@ export function Filters({
 					flexItem
 				/>
 				<div
-					className="centered half-width"
+					className="subtitle centered half-width"
 					onClick={() => {
 						setOnlyFavorites(true);
 						const newDisplay = filterCards(originalCards, faveCardIds, filterInput, difficultySelection, true);
 						setDisplayedCards(newDisplay);
 					}}
 				>
-					<span style={{ textDecoration: onlyFavorites?'underline':'none' }}>Favorites</span>
+					<span style={{ textDecoration: onlyFavorites?'underline 3px':'none' }}>Favorites</span>
 				</div>
 			</div>
 		</div>

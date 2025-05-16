@@ -8,15 +8,30 @@ body {
     color-scheme: dark;
   }
   background-color: #fdd3e2;
+  padding: 5%;
 }
 
 main {
 	margin-bottom: 60px;
+	width: 100%;
 }
 
 .absolute-right {
 	position: absolute;
-	right: 14px;
+	right: 20px;
+}
+
+.basic-modal {
+	position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  padding: 12px;
+  border-radius: 24px;
+  box-shadow: 1px 1px 8px cornflowerblue;
+  background-color: pink;
+  font-size: 16px;
 }
 
 .bottom-fixed {
@@ -29,7 +44,7 @@ main {
 }
 
 .card-container {
-	width: 300px;
+	width: 100%;
 	padding: 20px 0 20px 0;
 	margin: 40px 0 44px 0;
 }
@@ -54,13 +69,33 @@ main {
 	display: flex;
 }
 
+.colorful-textfield {
+	color: #A7E8FE;
+}
+
 .difficulty-label {
 	padding: 8px;
 	border: 1px black solid;
 	border-radius: 12px;
 	min-width: 90px;
-	margin-right: 6px;
+	margin-right: 20px;
 	text-align: center;
+	color: cornsilk;
+}
+
+.difficulty-Easy {
+	background-color: mediumseagreen;
+	border: none;
+}
+
+.difficulty-Medium {
+	background-color: skyblue;
+	border: none;
+}
+
+.difficulty-Hard {
+	background-color: indianred;
+	border: none;
 }
 
 .error {
@@ -87,6 +122,10 @@ main {
 	float: right;
 }
 
+.full-width {
+	width: 100%;
+}
+
 .gray-line {
 	max-height: 1px;
 	width: fill;
@@ -107,6 +146,20 @@ main {
 	display: inline;
 }
 
+.italic {
+	font-style: italic;
+}
+
+.hint-cost {
+	font-size: 20px;
+  margin: 14px 0px;
+  padding: 6px;
+  width: fit-content;
+  background-color: indianred;
+  border-radius: 14px;
+  color: white;
+}
+
 .jj-coin-img {
 	display: inline;
 	margin-left: 6px;
@@ -115,21 +168,45 @@ main {
 }
 
 .site-title {
-	width: 100%;
-	font-size: 36px;
+	min-width: 100%;
+	font-size: 32px;
+	color: floralwhite;
+	text-shadow: 0px 0px 4px cornflowerblue;
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.subtitle {
+	font-size: 20px;
+	color: floralwhite;
+	text-shadow: 0px 0px 3px cornflowerblue;
+	font-family: sans-serif;
+	font-weight: bold;
+	text-decoration-thickness: 3px;
 }
 
 .sparkles {
 	font-style: italic;
-	color: goldenrod;
-	text-shadow: 2px 2px violet;
+	color: deeppink;
+	text-shadow: 2px 2px goldenrod;
+}
+
+.underlined {
+	text-decoration: underline;
 }
 
 .question-holder {
+	padding: 20px 0 20px 0;
+	margin: 40px 0 44px 0;
 	border-radius: 20px;
   padding: 16px 16px 2px 16px;
   background-color: linen;
   box-shadow: 3px 3px 8px lightblue;
+}
+
+.question-title {
+	color: #DD4B60;
+	text-shadow: 0px 0px 1px gray;
 }
 
 .vertical-align {

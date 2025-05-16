@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useCookies } from 'react-cookie';
 import {
   isRouteErrorResponse,
   Links,
@@ -31,22 +30,33 @@ export const links: Route.LinksFunction = () => [
 ];
 
 
-function Footer({ setDisplayedPage }) {
+function Footer({ displayedPage, setDisplayedPage }) {
 	return (
 		<BottomNavigation
 			className="centered bottom-fixed"
       showLabels
     >
-      <BottomNavigationAction onClick={() => setDisplayedPage('rules')} label="Rules" />
-			<BottomNavigationAction onClick={() => setDisplayedPage('welcome')} label="Cards" />
-			<BottomNavigationAction onClick={() => setDisplayedPage('question store')} label="Question Store" />
+      <BottomNavigationAction
+				onClick={() => setDisplayedPage('rules')}
+				label="Rules"
+				style={{ textDecoration: displayedPage === 'rules' ? 'underline' : 'none' }}
+			/>
+			<BottomNavigationAction
+				onClick={() => setDisplayedPage('cards')}
+				label="Cards"
+				style={{ textDecoration: displayedPage === 'cards' ? 'underline' : 'none' }}
+			/>
+			<BottomNavigationAction
+				onClick={() => setDisplayedPage('question store')}
+				label="Scoinvenger Hints"
+				style={{ textDecoration: displayedPage === 'question store' ? 'underline' : 'none' }}
+			/>
     </BottomNavigation>
 	);
 };
 
 export function Layout() {
-	const [cookies] = useCookies<'loggedInUser', CookieValues>(['loggedInUser']);
-	const [displayedPage, setDisplayedPage] = useState(cookies.loggedInUser === null ? '' : 'cards');
+	const [displayedPage, setDisplayedPage] = useState('');
 	
   return (
     <html lang="en">
@@ -59,11 +69,12 @@ export function Layout() {
       <body>
 				<main className="centered">
 					<Welcome
-						loggedInUser={cookies.loggedInUser}
 						displayedPage={displayedPage}
 						setDisplayedPage={setDisplayedPage}
 					/>
-					<Footer setDisplayedPage={setDisplayedPage} />
+					{ displayedPage !== ''
+						&& <Footer displayedPage={displayedPage} setDisplayedPage={setDisplayedPage} />
+					}
         	<ScrollRestoration />
         	<Scripts />
 				</main>
@@ -74,9 +85,7 @@ export function Layout() {
 
 export default function App() {
   return (
-		<CookiesProvider>
-			<Outlet />
-		</CookiesProvider>
+		<Outlet />
 	);
 }
 

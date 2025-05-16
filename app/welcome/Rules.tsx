@@ -1,5 +1,7 @@
 export function Rules() {
 	return (
-		<div>Rules</div>
+		<div className="full-width">
+			Rules
+		</div>
 	);
 };

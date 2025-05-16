@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useCookies } from 'react-cookie';
 
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -7,11 +6,11 @@ import Button from '@mui/material/Button';
 import { Cards } from './Cards';
 import { QuestionStore } from './QuestionStore';
 import { Rules } from './Rules';
-import { getCards, getTeams, getTeamData } from './apiCalls';
+import { getCards, getTeams, getTeamData, getQuestions } from './apiCalls';
 
 
 
-function PasswordPrompt({ allTeamsData, setTeamData, setDisplayedPage, setCookie }) {
+function PasswordPrompt({ allTeamsData, setTeamData, setDisplayedPage }) {
 	const [enteredPassword, setEnteredPassword] = useState('');
 	const [errorIsHidden, setErrorIsHidden] = useState(true);
 	return (
@@ -43,10 +42,9 @@ function PasswordPrompt({ allTeamsData, setTeamData, setDisplayedPage, setCookie
 				disabled={enteredPassword.length < 1}
 				onClick={() => {
 					allTeamsData.map((team) => {
-						if (team.password === enteredPassword) {
+						if (team.password === enteredPassword || team.name === enteredPassword) {
 							setErrorIsHidden(true);
 							setTeamData(team);
-							setCookie('loggedInUser', team);
 							setDisplayedPage('cards');
 							return;
 						}
@@ -64,20 +62,17 @@ export function Welcome({
 	displayedPage,
 	setDisplayedPage,
 }) {
-	const [cookies, setCookie] = useCookies<'loggedInUser', CookieValues>(['loggedInUser']);
 	const [allTeamsData, setAllTeamsData] = useState([]);
-	const [teamData, setTeamData] = useState(cookies.loggedInUser);
+	const [teamData, setTeamData] = useState(null);
 	const [cardsData, setCardsData] = useState([]);
 	const [questionsData, setQuestionsData] = useState([]);
 	
 	useEffect(() => {
 			async function callGetAllData() {
 				const newCards = await getCards();
-				console.log('setting cardsData to: ',newCards);
 				setCardsData(newCards);
-				if (loggedInUser !== null) {
-					const newTeam = await getTeamData(loggedInUser.id);
-					console.log('setting teamData to: ', newTeam);
+				if (teamData !== null) {
+					const newTeam = await getTeamData(teamData.id);
 					setTeamData(newTeam);
 				}
 			}
@@ -86,13 +81,12 @@ export function Welcome({
 				callGetAllData();
 			}, 30000)
 		}, []);
+		
 	useEffect(() => {
 		async function callGetDataOnce() {
 			const newTeams = await getTeams();
-			console.log('setting teamsData to: ', newTeams);
 			setAllTeamsData(newTeams);
 			const newQuestions = await getQuestions();
-			console.log('setting questionsData to: ', newQuestions);
 			setQuestionsData(newQuestions);
 		}
 		callGetDataOnce();
@@ -111,7 +105,6 @@ export function Welcome({
 		default:
 			return (
 				<PasswordPrompt
-					setCookie={setCookie}
 					allTeamsData={allTeamsData}
 					setDisplayedPage={setDisplayedPage}
 					setTeamData={setTeamData}

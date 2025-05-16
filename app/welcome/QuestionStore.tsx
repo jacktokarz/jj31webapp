@@ -7,26 +7,29 @@ import TextField from '@mui/material/TextField';
 
 import { WelcomeHeader } from './WelcomeHeader';
 import { postQuestion } from './apiCalls';
+import { CoinIcon } from './CoinIcon';
 
 
 function WaitModal({ waitModalOpen, setWaitModalOpen }) {
+	console.log('wait modal ', waitModalOpen);
 	return (
 		<Modal
 		  open={waitModalOpen}
-			onClose={setWaitModalOpen(false)}
+			onClose={() => setWaitModalOpen(false)}
 		>
-			<div>
+			<div className="basic-modal">
 				<p>
 					Your question has been successfully submitted.
 				</p>
 				<p>
-					Your JJokens have been <span>foolishly squandered</span> well spent.
+					Your <span className="sparkles">JJokens</span> have been <span style={{ textDecoration: 'line-through' }}>foolishly squandered</span> well spent.
 				</p>
+				<br />
 				<p>
 					JJ or a JJ stand-in will respond to you in Discord shortly.
 				</p>
 				<Button
-					style={{ margin: ' 24px auto', fontSize: '18px', background: '#A7E8FE' }}
+					style={{ margin: ' 24px auto', fontSize: '14px', borderRadius: '8px' }}
 					className="centered"
 					variant="contained"
 					onClick={async () => {
@@ -46,10 +49,10 @@ function ConfirmModal({
 	teamName,
 	setWaitModalOpen,
 }) {
-	console.log('confirm modal', confirmModalData);
 	if (confirmModalData === null) {
 		return '';
 	}
+	console.log('confirm modal ', confirmModalData);
 	return (
 		<Modal
       open={confirmModalData !== null}
@@ -57,24 +60,29 @@ function ConfirmModal({
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-			<div>
+			<div className="basic-modal">
 				<p>
-					Are you absolutely certain you want to spend {confirmModalData.question.cost} hard-earned JJ bucks to ask for the following <span className="sparkles">scoinvenger hint</span>:
+					Are you absolutely <span className="underlined">certain</span> you want to
+					spend <span style={{ fontSize: '20px' }}>{confirmModalData.question.cost}</span> hard-earned <span className="sparkles">JJokens</span> to
+					ask for the following scoinvenger hint:
 				</p>
-				<p>
-					{confirmModalData.question}
+				<p className="italic">
+					{confirmModalData.question.title}
 				</p>
-				{confirmModalData.input !== null
-					&& <p>
-							With added context: {confirmModalData.input}
+				{confirmModalData.input.length > 0
+					&& <p style={{ marginTop: '12px'}}>
+							With added context:
+							<br />
+							<span className="italic">{confirmModalData.input}</span>
 						</p>
 				}
 				<Button
-					style={{ margin: ' 24px auto', fontSize: '18px', background: '#A7E8FE' }}
+					style={{ margin: ' 24px auto', fontSize: '18px', /*background: '#A7E8FE'*/ }}
 					className="centered"
 					variant="contained"
 					onClick={async () => {
 						await postQuestion(teamName, confirmModalData.question);
+						setWaitModalOpen(true);
 						setConfirmModalData(null);
 					}}
 				>
@@ -85,15 +93,18 @@ function ConfirmModal({
 	);
 }
 
-function QuestionHolder({ question }) {
+function QuestionHolder({ teamData, question, setConfirmModalData }) {
 	const [questionInput, setQuestionInput] = useState('');
-	console.log('showing question: ', question.title);
 	return (
 		<div className="question-holder">
 			<div className="question-title">
 				{question.title}
 			</div>
-			{question.requiresInput
+			<div className="hint-cost">
+				{question.cost}
+				<CoinIcon />
+			</div>
+			{question.additional_info === "True"
 			&& <TextField
 					label="Enter Details"
 					value={questionInput}
@@ -105,10 +116,14 @@ function QuestionHolder({ question }) {
 				/>
 			}
 			<Button
-				style={{ margin: ' 24px auto', fontSize: '18px', background: '#A7E8FE' }}
+				style={{ margin: ' 14px auto', fontSize: '18px' }}
 				className="centered"
 				variant="contained"
-				disabled={question.requiresInput && questionInput.length < 1}
+				disabled={
+					question.additional_info==="True" && questionInput.length < 1
+					||
+					question.cost > teamData.points
+				}
 				onClick={() => {
 					setConfirmModalData({ question: question, input: questionInput });
 				}}
@@ -123,20 +138,22 @@ export function QuestionStore({ teamData, questionsData }) {
 	const [confirmModalData, setConfirmModalData] = useState(null);
 	const [waitModalOpen, setWaitModalOpen] = useState(false);
 
-	console.log('questions length', questions.length);
 	return (
-		<div>
+		<div className="full-width">
 			<WelcomeHeader
 				titleText="Scoinvenger Hints"
 				pointValue={teamData.points}
 				teamName={teamData.teamName}
 			/>
 			<Divider
+				style={{ marginTop: '80px' }}
 				orientation="horizontal"
 			/>
 			{questionsData.map((question) => (
 				<QuestionHolder
+					teamData={teamData}
 					question={question}
+					setConfirmModalData={setConfirmModalData}
 				/>
 			))}
 			<ConfirmModal
