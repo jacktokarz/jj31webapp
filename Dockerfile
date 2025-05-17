@@ -8,7 +8,7 @@ FROM node:24.0.2-alpine AS production-dependencies-env
 COPY ./package.json package-lock.json /app/
 WORKDIR /app
 RUN npm install
-RUN npm ci --omit=dev
+# RUN npm ci --omit=dev
 
 FROM node:24.0.2-alpine AS build-env
 COPY . /app/
