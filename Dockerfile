@@ -2,7 +2,7 @@ FROM node:24.0.2-alpine AS development-dependencies-env
 COPY . /app
 WORKDIR /app
 RUN npm install
-RUN npm ci
+# RUN npm ci
 
 FROM node:24.0.2-alpine AS production-dependencies-env
 COPY ./package.json package-lock.json /app/
