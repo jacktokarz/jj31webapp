@@ -20,7 +20,7 @@ function PasswordPrompt({ allTeamsData, setTeamData, setDisplayedPage }) {
 			</header>
 			<TextField
 				id="outlined-basic"
-				label="Team Password"
+				label="Team Name"
 				variant="outlined"
 				fullWidth
 				value={enteredPassword}
@@ -32,7 +32,7 @@ function PasswordPrompt({ allTeamsData, setTeamData, setDisplayedPage }) {
 				}}
 			/>
 			<p hidden={errorIsHidden} className="error centered">
-				Incorrect Password
+				Incorrect Team Name
 			</p>
 			<br />
 			<Button
@@ -42,7 +42,7 @@ function PasswordPrompt({ allTeamsData, setTeamData, setDisplayedPage }) {
 				disabled={enteredPassword.length < 1}
 				onClick={() => {
 					allTeamsData.map((team) => {
-						if (team.key === enteredPassword || team.name === enteredPassword) {
+						if (team.key.toLowerCase() === enteredPassword.toLowerCase() || team.name.toLowerCase() === enteredPassword.toLowerCase()) {
 							setErrorIsHidden(true);
 							setTeamData(team);
 							setDisplayedPage('cards');

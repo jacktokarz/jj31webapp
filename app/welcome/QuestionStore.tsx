@@ -11,7 +11,6 @@ import { CoinIcon } from './CoinIcon';
 
 
 function WaitModal({ waitModalOpen, setWaitModalOpen }) {
-	console.log('wait modal ', waitModalOpen);
 	return (
 		<Modal
 		  open={waitModalOpen}
