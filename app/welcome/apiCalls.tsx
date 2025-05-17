@@ -1,4 +1,4 @@
-const apiBase = 'http://127.0.0.1:8000';
+const apiBase = 'http://localhost:8000';
 
 async function callApi(argument) {
 	const response = await fetch(`${apiBase}/${argument}/`);
@@ -49,6 +49,6 @@ export async function postUnfavorite(cardId, teamId) {
 	const response = await postApi(`cards/${cardId}/unfavorite`, { team_id: teamId });
 }
 
-export async function postQuestion(questionId, teamId) {
-	const response = await postApi(`questions/${questionId}`, { team_id: teamId });
+export async function postQuestion(questionId, teamId, input) {
+	const response = await postApi(`questions/${questionId}`, { team_id: teamId, addl_info: input });
 }

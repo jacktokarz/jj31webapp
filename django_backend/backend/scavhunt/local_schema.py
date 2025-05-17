@@ -62,7 +62,7 @@ class Team():
         self.id = id
         self.players = players
         self.name = name
-        self.points = points
+        self.points = points if points is not None else 0
         self.completed_cards = completed_cards
         self.favorite_cards = favorite_cards
         self.asked_questions = asked_questions

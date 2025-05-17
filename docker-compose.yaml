@@ -1,0 +1,17 @@
+services:
+  bot:
+    build: ./django_backend/backend/discordbot
+    command: python discordscavhuntbot.py
+  api:
+    build: ./django_backend/backend
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      - bot
+    links:
+      - bot
+  app:
+    build: ./ 
+    ports:
+      - "3000:3000"

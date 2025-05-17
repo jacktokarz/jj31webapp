@@ -58,7 +58,13 @@ def question_detail(request, id):
     
     if request.method == 'POST':
         sender = ds.DiscordSender()
-        sender.post_question(question, request.data["team_id"], request.data["details"])
+        team = fetcher.get_team(request.data["team_id"])
+        if team is None:
+            raise HttpResponseBadRequest
+        details = "" 
+        if "addl_info" in request.data and len(request.data["addl_info"]) > 0:
+            details = request.data["addl_info"]
+        sender.post_question(question, team, details)
         return HttpResponse("Success")
 
 @api_view(['POST'])

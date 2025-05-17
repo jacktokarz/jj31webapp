@@ -21,7 +21,7 @@ class Leaderboard():
             for card in team.completed_cards:
                 new_points = new_points + card.value
             for a_time in self.timeline:
-                if a_time.team.id == team.id:
+                if a_time.team is not None and a_time.team.id == team.id:
                     new_points = new_points + a_time.get_total_points()
             if new_points != old_points:
                 changes[team.id] = {"name": team.name, "new_points": new_points, "old_points": old_points}

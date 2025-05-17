@@ -42,7 +42,7 @@ function PasswordPrompt({ allTeamsData, setTeamData, setDisplayedPage }) {
 				disabled={enteredPassword.length < 1}
 				onClick={() => {
 					allTeamsData.map((team) => {
-						if (team.password === enteredPassword || team.name === enteredPassword) {
+						if (team.key === enteredPassword || team.name === enteredPassword) {
 							setErrorIsHidden(true);
 							setTeamData(team);
 							setDisplayedPage('cards');

@@ -81,7 +81,7 @@ function ConfirmModal({
 					className="centered"
 					variant="contained"
 					onClick={async () => {
-						await postQuestion(confirmModalData.question.id, teamId);
+						await postQuestion(confirmModalData.question.id, teamId, confirmModalData.input);
 						setWaitModalOpen(true);
 						setConfirmModalData(null);
 					}}
